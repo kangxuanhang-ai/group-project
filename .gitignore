@@ -1,0 +1,82 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Production builds
+dist/
+build/
+.output/
+.nuxt/
+.next/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Database
+*.sqlite
+*.sqlite3
+
+# Debug
+dump.rdb
+
+# Temporary files
+.temp/
+.tmp/
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+dist/
+
+# next.js build output
+.next/
+
+# Nuxt.js build / generate outputs
+.output/
+.nuxt/
+
+# Storybook build outputs
+.out/
+.storybook-out
+
+# Temporary folders
+tmp/
+temp/
