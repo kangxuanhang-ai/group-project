@@ -10,13 +10,12 @@
                 <span class="text-white text-xl font-bold">English App</span>
             </div>
         </div>
-        <!-- 登录/注册切换按钮 -->
         <div class="absolute top-6 right-6">
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg p-1">
-                <button :class="loginClass">
+                <button :class="loginClass" @click="emit('update:formType', 'login')">
                     登录
                 </button>
-                <button :class="registerClass">
+                <button :class="registerClass" @click="emit('update:formType', 'register')">
                     注册
                 </button>
             </div>
@@ -25,12 +24,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-const type = ref < 'login' | 'register' > ('login')
+import { computed } from 'vue'
+
+const props = defineProps<{
+    formType: 'login' | 'register'
+}>()
+
+const emit = defineEmits<{
+    (e: 'update:formType', value: 'login' | 'register'): void
+}>()
+
 const loginClass = computed(() => {
-    return type.value === 'login' ? 'bg-indigo-500 text-white shadow-lg px-4 py-2 rounded-md text-sm font-medium transition-all' : 'text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all'
+    return props.formType === 'login' ? 'bg-indigo-500 text-white shadow-lg px-4 py-2 rounded-md text-sm font-medium transition-all' : 'text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all'
 })
 const registerClass = computed(() => {
-    return type.value === 'register' ? 'bg-indigo-500 text-white shadow-lg px-4 py-2 rounded-md text-sm font-medium transition-all' : 'text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all'
+    return props.formType === 'register' ? 'bg-indigo-500 text-white shadow-lg px-4 py-2 rounded-md text-sm font-medium transition-all' : 'text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all'
 })
 </script>
