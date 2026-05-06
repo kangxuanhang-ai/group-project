@@ -11,8 +11,8 @@
             </button>
             <ModelViewer v-model:formType="formType" />
             <div class="flex-1 flex flex-col justify-center px-12 py-10 bg-white">
-                <LoginForm v-if="formType === 'login'" />
-                <RegisterForm v-else />
+                <LoginForm v-if="formType === 'login'" @success="handleSuccess" />
+                <RegisterForm v-else @success="handleSuccess" />
             </div>
         </div>
     </div>
@@ -27,6 +27,11 @@ import { IS_SHOW_LOGIN } from './type';
 
 const isShowLogin = inject(IS_SHOW_LOGIN, ref(false))
 const formType = ref<'login' | 'register'>('login')
+
+const handleSuccess = () => {
+    isShowLogin.value = false
+    formType.value = 'login'
+}
 
 const handleKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {

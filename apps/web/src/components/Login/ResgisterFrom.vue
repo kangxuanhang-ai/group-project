@@ -36,7 +36,12 @@ import { ref } from 'vue'
 import { User, Lock, Iphone, Message } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { registerApi } from '@/apis/user'
+import { useUserStore } from '@/stores/user'
 import type { FormInstance } from 'element-plus'
+
+const emit = defineEmits<{
+    (e: 'success'): void
+}>()
 
 const formRef = ref<FormInstance>()
 const form = ref({
@@ -93,7 +98,10 @@ const handleRegister = async () => {
             password: form.value.password,
         })
         if (res.success) {
+            const userStore = useUserStore()
+            userStore.setLogin(res.data)
             ElMessage.success('注册成功')
+            emit('success')
         } else {
             ElMessage.error(res.message || '注册失败')
         }

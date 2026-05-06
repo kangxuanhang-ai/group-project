@@ -15,8 +15,13 @@ export class AuthService {
     ) { }
 
     async register(dto: RegisterDto) {
-        const existing = await this.prisma.user.findUnique({ where: { phone: dto.phone } })
-        if (existing) return this.response.error(null, '该手机号已注册', 400)
+        const existingPhone = await this.prisma.user.findUnique({ where: { phone: dto.phone } })
+        if (existingPhone) return this.response.error(null, '该手机号已注册', 400)
+
+        if (dto.email) {
+            const existingEmail = await this.prisma.user.findUnique({ where: { email: dto.email } })
+            if (existingEmail) return this.response.error(null, '该邮箱已注册', 400)
+        }
 
         const hashedPassword = await bcrypt.hash(dto.password, 10)
 
