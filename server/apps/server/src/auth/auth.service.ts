@@ -5,6 +5,8 @@ import { PrismaService } from '@libs/shared';
 import { ResponseService } from '@libs/shared';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import type { TokenPayload, RefreshTokenPayload } from '@en/common/user';
+import type { Token } from '@en/common/user';
 
 @Injectable()
 export class AuthService {
@@ -56,11 +58,34 @@ export class AuthService {
         return this.response.success({ ...result, token })
     }
 
-    private generateToken(user: { id: string; phone: string }) {
-        const payload = { sub: user.id, phone: user.phone }
+    async refreshToken(refreshToken: string) {
+        try {
+            const decoded = this.jwtService.verify<RefreshTokenPayload>(refreshToken)
+            if (decoded.tokenType !== 'refresh') {
+                return this.response.error(null, 'refreshToken已过期或无效', 401)
+            }
+
+            const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } })
+            if (!user) return this.response.error(null, '用户不存在', 401)
+
+            const token = this.generateToken(user)
+            return this.response.success(token)
+        } catch {
+            return this.response.error(null, 'refreshToken已过期或无效', 401)
+        }
+    }
+
+    private generateToken(user: { id: string; name: string; email?: string | null }): Token {
+        const payload: TokenPayload = { userId: user.id, name: user.name, email: user.email }
         return {
-            accessToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
-            refreshToken: this.jwtService.sign(payload, { expiresIn: '30d' }),
+            accessToken: this.jwtService.sign<RefreshTokenPayload>(
+                { ...payload, tokenType: 'access' },
+                { expiresIn: '7d' },
+            ),
+            refreshToken: this.jwtService.sign<RefreshTokenPayload>(
+                { ...payload, tokenType: 'refresh' },
+                { expiresIn: '30d' },
+            ),
         }
     }
 }

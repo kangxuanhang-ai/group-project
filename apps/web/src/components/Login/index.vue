@@ -12,7 +12,7 @@
             <ModelViewer v-model:formType="formType" />
             <div class="flex-1 flex flex-col justify-center px-12 py-10 bg-white">
                 <LoginForm v-if="formType === 'login'" @success="handleSuccess" />
-                <RegisterForm v-else @success="handleSuccess" />
+                <RegisterForm v-else @registered="handleRegistered" />
             </div>
         </div>
     </div>
@@ -24,12 +24,18 @@ import LoginForm from './LoginForm.vue'
 import RegisterForm from './ResgisterFrom.vue'
 import { ref, inject, onUnmounted } from 'vue';
 import { IS_SHOW_LOGIN } from './type';
+import { useLogin } from '@/hooks/useLogin';
 
 const isShowLogin = inject(IS_SHOW_LOGIN, ref(false))
 const formType = ref<'login' | 'register'>('login')
+const { resolveLogin } = useLogin()
 
 const handleSuccess = () => {
-    isShowLogin.value = false
+    resolveLogin()
+    formType.value = 'login'
+}
+
+const handleRegistered = () => {
     formType.value = 'login'
 }
 

@@ -7,6 +7,8 @@ export const useUserStore = defineStore('user', () => {
   const user = ref<ResultUser | null>(null)
 
   const isLoggedIn = computed(() => !!token.value?.accessToken)
+  const getAccessToken = computed(() => token.value?.accessToken)
+  const getRefreshToken = computed(() => token.value?.refreshToken)
 
   function setLogin(data: { token: Token } & ResultUser) {
     token.value = data.token
@@ -14,12 +16,16 @@ export const useUserStore = defineStore('user', () => {
     user.value = userInfo
   }
 
+  function updateToken(newToken: Token) {
+    token.value = newToken
+  }
+
   function logout() {
     token.value = null
     user.value = null
   }
 
-  return { token, user, isLoggedIn, setLogin, logout }
+  return { token, user, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout }
 }, {
   persist: true,
 })
