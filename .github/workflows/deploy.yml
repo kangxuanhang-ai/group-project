@@ -23,8 +23,9 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      # 👇 就这里加了 --ignore-scripts=false 修复报错
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts=false
 
       - name: Build frontend
         run: pnpm --filter @en/web build
