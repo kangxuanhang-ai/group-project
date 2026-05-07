@@ -69,33 +69,21 @@ jobs:
           strip_components: 1
 
       - name: Remote deploy
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             set -e
             cd /opt/english-app
 
-            # 升级 pnpm 到最新版
-            curl -fsSL https://get.pnpm.io/install.sh | sh -
-            source ~/.bashrc
+            npm install --production
 
-            # 官方 approve 命令，彻底解决构建脚本问题
-            pnpm approve-builds --all
-
-            # 标准安装命令
-            pnpm install --prod --frozen-lockfile
-
-            # 数据库迁移
             cd server
             npx prisma migrate deploy
             cd ..
 
-            # 启动服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
 
             pm2 save
+          EOF
