@@ -41,14 +41,13 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {getCourseList} from '@/apis/course'
-import type {CourseList} from '@/en/common/course'
-// import { UploadUrl } from '@/apis' 
-const list = ref<CourseList[]>([])
+import type {Course} from '@en/common/course'
+const list = ref<Course[]>([])
 const getList= async()=>{
     const res = await getCourseList()
-    list.value = res.data
+    if (res.success) list.value = res.data
 }
-const imageSrc = (url: string) =>{return UploadUrl + url} 
+const imageSrc = (url: string) =>{return url} 
 
 onMounted(()=>{
     getList()

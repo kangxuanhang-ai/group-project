@@ -7,9 +7,11 @@ let loginResolve: (() => void) | null = null
 export const useLogin = () => {
   const isShowLogin = inject(IS_SHOW_LOGIN, ref(false));
 
-  const login = () => {
+  const login = async () => {
     const userStore = useUserStore()
-    if (userStore.isLoggedIn) return Promise.resolve()
+    await userStore.checkAuth()
+
+    if (userStore.isLoggedIn) return
 
     isShowLogin.value = true
     return new Promise<void>((resolve) => {

@@ -2,17 +2,9 @@ import axios from 'axios'
 import { useUserStore } from '@/stores/user'
 import router from '@/router'
 import type { Token } from '@en/common/user'
+import { refreshApi } from './refresh'
 
 export const timeout = 50000
-
-// 刷新 token 专用实例（不带拦截器，避免循环依赖）
-export const refreshApi = axios.create({
-    baseURL: '/api/v1',
-    timeout,
-})
-refreshApi.interceptors.response.use(res => {
-    return res.data
-})
 
 // 主业务 API 实例
 export const serverApi = axios.create({
