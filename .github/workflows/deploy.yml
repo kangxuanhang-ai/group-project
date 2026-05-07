@@ -39,26 +39,35 @@ jobs:
         env:
           DATABASE_URL: "mysql://root:password@localhost:3306/placeholder_db"
 
-      # --- 关键修复 2：打包所有要发送的文件 ---
+      # --- 关键修复 2：打包所有要发送的文件 (使用更鲁棒的拷贝方式) ---
       - name: Prepare deploy artifacts
         run: |
+          # 1. 创建目标目录结构
           mkdir -p deploy/apps/web \
                    deploy/packages/common \
                    deploy/packages/config \
                    deploy/server/prisma \
-                   deploy/server/libs/shared/src
+                   deploy/server/libs/shared
 
+          # 2. 拷贝前端产物
           cp -r apps/web/dist deploy/apps/web/
+
+          # 3. 拷贝后端产物
           cp -r server/dist deploy/server/
           cp -r server/prisma/* deploy/server/prisma/
-          cp -r packages/common/{package.json,index.ts,user,word} deploy/packages/common/
-          cp -r packages/config/{package.json,index.ts} deploy/packages/config/
-          cp -r server/libs/shared/src/* deploy/server/libs/shared/src/
-          cp server/libs/shared/package.json deploy/server/libs/shared/
+          cp server/package.json deploy/server/
+
+          # 4. 拷贝 workspace 依赖包 (直接拷贝文件夹，避免文件名不匹配)
+          cp -r packages/common/* deploy/packages/common/
+          cp -r packages/config/* deploy/packages/config/
+
+          # 5. 拷贝共享库
+          cp -r server/libs/shared/* deploy/server/libs/shared/
+
+          # 6. 拷贝根目录配置文件
           cp package.json deploy/
           cp pnpm-workspace.yaml deploy/
           cp pnpm-lock.yaml deploy/
-          cp server/package.json deploy/server/
 
       # --- 同步文件到服务器 ---
       - name: Sync to server
@@ -81,11 +90,20 @@ jobs:
           script: |
             set -e
             cd /opt/english-app
+            
+            # 确保 pnpm 全局可用 (如果服务器报错找不到 pnpm)
+            # export PATH=$PATH:/root/.local/share/pnpm
+            
             pnpm install --prod --frozen-lockfile
+            
             cd server
+            # 运行数据库迁移
             npx prisma migrate deploy
             cd ..
+            
+            # 启动或重启服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
+            
             pm2 save
