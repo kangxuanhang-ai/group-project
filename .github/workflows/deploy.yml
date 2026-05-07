@@ -68,6 +68,7 @@ jobs:
           cp package.json deploy/
           cp pnpm-workspace.yaml deploy/
           cp pnpm-lock.yaml deploy/
+          cp .npmrc deploy/
 
       # --- 同步文件到服务器 ---
       - name: Sync to server
@@ -80,7 +81,7 @@ jobs:
           target: /opt/english-app
           strip_components: 1
 
-     # --- 远程执行部署命令 ---
+      # --- 远程执行部署命令 ---
       - name: Remote deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -90,21 +91,18 @@ jobs:
           script: |
             set -e
             cd /opt/english-app
-            
-            # 1. 核心修复：强制让 pnpm 允许运行所有构建脚本
-            pnpm config set ignore-scripts false
-            
-            # 2. 安装生产依赖
+
+            # 安装生产依赖（.npmrc 中的 package-manager-strict=false 允许构建脚本运行）
             pnpm install --prod --frozen-lockfile
-            
-            # 3. 运行 Prisma 迁移
+
+            # 数据库迁移
             cd server
             npx prisma migrate deploy
             cd ..
-            
-            # 4. 重启或启动服务
+
+            # 启动 / 重启服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
-            
+
             pm2 save
