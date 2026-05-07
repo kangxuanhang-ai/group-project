@@ -91,15 +91,18 @@ jobs:
             set -e
             cd /opt/english-app
             
-            # 使用通用参数，强制运行安装脚本（Prisma 需要它）
-            pnpm install --prod --frozen-lockfile --ignore-scripts=false
+            # 1. 核心修复：强制让 pnpm 允许运行所有构建脚本
+            pnpm config set ignore-scripts false
             
+            # 2. 安装生产依赖
+            pnpm install --prod --frozen-lockfile
+            
+            # 3. 运行 Prisma 迁移
             cd server
-            # 运行迁移
             npx prisma migrate deploy
             cd ..
             
-            # 重启服务
+            # 4. 重启或启动服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
