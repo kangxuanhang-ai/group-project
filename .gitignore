@@ -6,6 +6,7 @@ yarn-error.log*
 pnpm-debug.log*
 vite.config.ts.timestamp-*
 
+
 # Production builds
 dist/
 build/
