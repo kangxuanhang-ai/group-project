@@ -1,4 +1,7 @@
 {
+	"pnpm": {
+		"onlyBuiltDependencies": ["@prisma/engines", "prisma", "@nestjs/core"]
+	},
 	"scripts": {
 		"web": "pnpm --filter @en/web dev",
 		"server": "pnpm --filter @en/server start:dev",
