@@ -91,13 +91,14 @@ jobs:
             set -e
             cd /opt/english-app
             
-            # 确保 pnpm 全局可用 (如果服务器报错找不到 pnpm)
-            # export PATH=$PATH:/root/.local/share/pnpm
+            # --- 核心修复：允许运行 package.json 中的构建脚本 ---
+            pnpm config set ignore-scripts false
             
+            # 安装生产依赖
             pnpm install --prod --frozen-lockfile
             
+            # 运行 Prisma 迁移
             cd server
-            # 运行数据库迁移
             npx prisma migrate deploy
             cd ..
             
