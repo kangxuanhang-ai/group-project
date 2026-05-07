@@ -11,10 +11,10 @@
                     <HomeFilled />
                 </el-icon> <span>主页</span>
             </div>
-            <div @click="router.push('/smart/chat')" class="flex items-center gap-2 cursor-pointer text-gray-500">
+            <div @click="router.push('/chat/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
                 <el-icon>
                     <MagicStick />
-                </el-icon> <span>AI</span>
+                </el-icon> <span>聊天</span>
             </div>
             <div @click="router.push('/word-book/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
                 <el-icon>

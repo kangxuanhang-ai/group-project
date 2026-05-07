@@ -165,7 +165,7 @@ export type WordBookRecordGroupByOutputType = {
   _max: WordBookRecordMaxAggregateOutputType | null
 }
 
-type GetWordBookRecordGroupByPayload<T extends WordBookRecordGroupByArgs> = Prisma.PrismaPromise<
+export type GetWordBookRecordGroupByPayload<T extends WordBookRecordGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<WordBookRecordGroupByOutputType, T['by']> &
       {
@@ -1293,6 +1293,11 @@ export type WordBookRecordFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` WordBookRecords.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of WordBookRecords.
+   */
   distinct?: Prisma.WordBookRecordScalarFieldEnum | Prisma.WordBookRecordScalarFieldEnum[]
 }
 
