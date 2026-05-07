@@ -80,7 +80,7 @@ jobs:
           target: /opt/english-app
           strip_components: 1
 
-      # --- 远程执行部署命令 ---
+     # --- 远程执行部署命令 ---
       - name: Remote deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -91,8 +91,8 @@ jobs:
             set -e
             cd /opt/english-app
             
-            # 直接在安装时指定允许构建的包，解决 pnpm 10 的拦截问题
-            pnpm install --prod --frozen-lockfile --only-built-dependencies=@prisma/engines,prisma,@nestjs/core
+            # 使用通用参数，强制运行安装脚本（Prisma 需要它）
+            pnpm install --prod --frozen-lockfile --ignore-scripts=false
             
             cd server
             # 运行迁移
