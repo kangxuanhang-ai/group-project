@@ -23,7 +23,6 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      # 👇 就这里加了 --ignore-scripts=false 修复报错
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts=false
 
@@ -95,9 +94,10 @@ jobs:
 
             # --- 终极修复：强制允许执行所有构建脚本 ---
             pnpm config set ignore-scripts false
+            pnpm config set enable-pre-post-scripts true
 
-            # 安装生产依赖
-            pnpm install --prod --frozen-lockfile
+            # 安装生产依赖（关键修复：加上 --ignore-scripts=false）
+            pnpm install --prod --frozen-lockfile --ignore-scripts=false
 
             # 数据库迁移
             cd server
