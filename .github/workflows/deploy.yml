@@ -32,10 +32,14 @@ jobs:
       - name: Build server
         run: pnpm --filter @en/server build
 
+      # --- 关键修复 1：生成 Prisma Client 必须在同步之前 ---
       - name: Generate Prisma Client
         working-directory: server
         run: npx prisma generate
+        env:
+          DATABASE_URL: "mysql://root:password@localhost:3306/placeholder_db"
 
+      # --- 关键修复 2：打包所有要发送的文件 ---
       - name: Prepare deploy artifacts
         run: |
           mkdir -p deploy/apps/web \
@@ -44,31 +48,19 @@ jobs:
                    deploy/server/prisma \
                    deploy/server/libs/shared/src
 
-          # 前端构建产物
           cp -r apps/web/dist deploy/apps/web/
-
-          # 后端编译产物
           cp -r server/dist deploy/server/
-
-          # Prisma schema + migrations（用于 migrate deploy）
           cp -r server/prisma/* deploy/server/prisma/
-
-          # workspace 共享包（运行时必须）
           cp -r packages/common/{package.json,index.ts,user,word} deploy/packages/common/
           cp -r packages/config/{package.json,index.ts} deploy/packages/config/
-
-          # libs/shared（PrismaService、ResponseService、拦截器等）
           cp -r server/libs/shared/src/* deploy/server/libs/shared/src/
           cp server/libs/shared/package.json deploy/server/libs/shared/
-
-          # 根级 pnpm 配置
           cp package.json deploy/
           cp pnpm-workspace.yaml deploy/
           cp pnpm-lock.yaml deploy/
-
-          # server 配置
           cp server/package.json deploy/server/
 
+      # --- 同步文件到服务器 ---
       - name: Sync to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -79,6 +71,7 @@ jobs:
           target: /opt/english-app
           strip_components: 1
 
+      # --- 远程执行部署命令 ---
       - name: Remote deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -87,22 +80,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
-
             cd /opt/english-app
-
-            # 安装生产依赖（pnpm 会自动解析 workspace 包）
             pnpm install --prod --frozen-lockfile
-
-            # 数据库迁移
             cd server
             npx prisma migrate deploy
             cd ..
-
-            # 启动 / 重启服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
-              || pm2 start server/dist/apps/server/apps/server/src/main.js \
-                 --name english-app \
-                 -- -b 0.0.0.0
-
+              || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
             pm2 save
