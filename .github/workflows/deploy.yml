@@ -56,7 +56,8 @@ jobs:
           cp package.json deploy/
           cp pnpm-workspace.yaml deploy/
           cp pnpm-lock.yaml deploy/
-          cp .npmrc deploy/
+          # 如果项目中存在 .npmrc 则一并拷贝
+          if [ -f .npmrc ]; then cp .npmrc deploy/; fi
 
       - name: Sync to server
         uses: appleboy/scp-action@v0.1.7
@@ -80,14 +81,21 @@ jobs:
             set -e
             cd /opt/english-app
 
-            npm install --production
+            # --- 核心修复：彻底关闭服务器端 pnpm 的安全拦截，允许 Prisma 正常构建 ---
+            pnpm config set ignore-scripts false
 
+            # --- 关键：必须使用 pnpm 安装，以正确识别 Monorepo 工作区结构 ---
+            pnpm install --prod --frozen-lockfile
+
+            # --- 数据库迁移 ---
             cd server
             npx prisma migrate deploy
             cd ..
 
+            # --- 启动或重启服务 ---
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
 
+            # --- 保存当前 PM2 进程列表，开机自启 ---
             pm2 save
