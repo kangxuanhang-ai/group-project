@@ -9,13 +9,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getChatMode } from '@/apis/chat'
 import type { ChatModeList, ChatMode } from '@en/common/chat';
-
+const emit = defineEmits(['onGetRole'])
 const chatMode = ref<ChatModeList>([]) // 消息模式列表
 const active = ref<string | null>(null) // 当前激活的id
 
 const changeActive = (value: ChatMode) => {
     active.value = value.id
+    emit('onGetRole',value.role)
 }
+
+const getChatModeList = async () => {
+    const res = await getChatMode()
+    chatMode.value = res.data
+    active.value = res.data[0].id
+    emit('onGetRole',res.data[0].role)
+}
+
+onMounted(() => {
+    getChatModeList()
+})
 </script>

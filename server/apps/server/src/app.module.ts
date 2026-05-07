@@ -6,8 +6,17 @@ import { SharedModule } from '@libs/shared';
 import { WordBookModule } from './word-book/word-book.module';
 import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
-  imports: [UserModule, SharedModule, WordBookModule, AuthModule, CourseModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    UserModule,
+    SharedModule,
+    WordBookModule,
+    AuthModule,
+    CourseModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

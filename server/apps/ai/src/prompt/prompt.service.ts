@@ -1,26 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePromptDto } from './dto/create-prompt.dto';
-import { UpdatePromptDto } from './dto/update-prompt.dto';
+import { chatMode } from './prompt.mode';
+import { ResponseService } from '@libs/shared';
 
 @Injectable()
 export class PromptService {
-  create(createPromptDto: CreatePromptDto) {
-    return 'This action adds a new prompt';
-  }
+  constructor(private readonly responseService: ResponseService) {}
 
   findAll() {
-    return `This action returns all prompt`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} prompt`;
-  }
-
-  update(id: number, updatePromptDto: UpdatePromptDto) {
-    return `This action updates a #${id} prompt`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} prompt`;
+    // 返回左侧列表 并且过滤掉提示词 提示词不返回给前端
+    return this.responseService.success(chatMode.map(item => ({
+      id: item.id,
+      label: item.label,
+      role: item.role,
+    })));
   }
 }
