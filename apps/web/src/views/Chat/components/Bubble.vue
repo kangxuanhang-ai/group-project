@@ -25,10 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref,useTemplateRef,watch,nextTick } from 'vue'
 import { Position } from '@element-plus/icons-vue';
 import type { ChatMessageList } from '@en/common/chat';
 
+import {marked} from 'marked'
+const chatRef = useTemplateRef<HTMLDivElement>('chatRef')
+const emits = defineEmits(['onSendMessage'])
 const props = defineProps<{
     list?: ChatMessageList
 }>()
@@ -37,11 +40,24 @@ const message = ref<string>('') // 发送的内容
 
 // 发送消息
 const sendMessage = () => {
-
-}
+    if(!message.value) return
+  emits('onSendMessage',message.value)
+  message.value = '';
+};
 
 // markdown解析HTML
 const parseMarkdown = (content: string) => {
-
+    if(!content) return ''
+    return marked.parse(content)
 }
+
+// 监听list变化，滚动到最底部
+watch(() => props.list, () => {
+  nextTick(() => {
+    chatRef.value?.scrollIntoView({ behavior: 'smooth' });
+  });
+}, {
+  immediate: true,
+  deep: true
+});
 </script>
