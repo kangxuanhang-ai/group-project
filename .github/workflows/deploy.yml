@@ -91,18 +91,15 @@ jobs:
             set -e
             cd /opt/english-app
             
-            # --- 核心修复：允许运行 package.json 中的构建脚本 ---
-            pnpm config set ignore-scripts false
+            # 直接在安装时指定允许构建的包，解决 pnpm 10 的拦截问题
+            pnpm install --prod --frozen-lockfile --only-built-dependencies=@prisma/engines,prisma,@nestjs/core
             
-            # 安装生产依赖
-            pnpm install --prod --frozen-lockfile
-            
-            # 运行 Prisma 迁移
             cd server
+            # 运行迁移
             npx prisma migrate deploy
             cd ..
             
-            # 启动或重启服务
+            # 重启服务
             pm2 describe english-app > /dev/null 2>&1 \
               && pm2 restart english-app \
               || pm2 start server/dist/apps/server/apps/server/src/main.js --name english-app
