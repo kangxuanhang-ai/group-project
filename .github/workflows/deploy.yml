@@ -92,7 +92,10 @@ jobs:
             set -e
             cd /opt/english-app
 
-            # 安装生产依赖（.npmrc 中的 package-manager-strict=false 允许构建脚本运行）
+            # --- 终极修复：强制允许执行所有构建脚本 ---
+            pnpm config set ignore-scripts false
+
+            # 安装生产依赖
             pnpm install --prod --frozen-lockfile
 
             # 数据库迁移
