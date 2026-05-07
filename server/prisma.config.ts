@@ -7,6 +7,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts" //增加这一行代码
   },
   datasource: {
     url: env("DATABASE_URL"),
