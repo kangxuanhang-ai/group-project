@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
+    "@types/dom-speech-recognition": "^0.0.11",
     "@types/node": "^18.19.3",
     "@types/three": "^0.182.0",
     "@vitejs/plugin-vue": "^4.5.2",

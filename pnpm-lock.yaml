@@ -85,6 +85,9 @@ importers:
       '@tsconfig/node18':
         specifier: ^18.2.2
         version: 18.2.6
+      '@types/dom-speech-recognition':
+        specifier: ^0.0.11
+        version: 0.0.11
       '@types/node':
         specifier: ^18.19.3
         version: 18.19.130
@@ -1752,6 +1755,9 @@ packages:
 
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
+
+  '@types/dom-speech-recognition@0.0.11':
+    resolution: {integrity: sha512-PyLFPLM9F5D+qEmkNLX/ZC3uiEV/2B/UhZA9uhWkFVOxUyDVj+UBKI2pF1dnhKhliOiIoR1d/QsOZQfOtQPE3A==}
 
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
@@ -6411,6 +6417,8 @@ snapshots:
       '@types/node': 22.19.3
 
   '@types/cookiejar@2.1.5': {}
+
+  '@types/dom-speech-recognition@0.0.11': {}
 
   '@types/eslint-scope@3.7.7':
     dependencies:
