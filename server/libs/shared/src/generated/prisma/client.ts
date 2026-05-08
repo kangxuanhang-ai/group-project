@@ -69,3 +69,8 @@ export type CourseRecord = Prisma.CourseRecordModel
  * 
  */
 export type Course = Prisma.CourseModel
+/**
+ * Model SmsCode
+ * 
+ */
+export type SmsCode = Prisma.SmsCodeModel

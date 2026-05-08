@@ -130,3 +130,18 @@ model Course {
   updatedAt     DateTime       @updatedAt // 更新时间
   courseRecords CourseRecord[]
 }
+
+//短信验证码表
+model SmsCode {
+  id        String   @id @default(cuid()) // 记录ID
+  phone     String // 手机号
+  code      String // 验证码
+  expiresAt DateTime // 过期时间
+  used      Boolean  @default(false) // 是否已使用
+  attempts  Int      @default(0) // 校验失败次数
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @updatedAt // 更新时间
+
+  @@index([phone])
+  @@index([phone, code])
+}

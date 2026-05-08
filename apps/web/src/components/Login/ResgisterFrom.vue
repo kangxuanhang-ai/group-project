@@ -9,17 +9,24 @@
             <el-input v-model="form.name" placeholder="请输入用户名" size="large" class="h-12" :prefix-icon="User" />
         </el-form-item>
         <el-form-item prop="phone">
-            <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12" :prefix-icon="Iphone" />
+            <div class="flex w-full gap-3">
+                <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12 flex-1"
+                    :prefix-icon="Iphone" />
+                <el-button size="large" :disabled="codeSending || countdown > 0" class="h-12 px-5 shrink-0"
+                    @click="handleSendCode"
+                    :class="countdown > 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'">
+                    <template v-if="countdown > 0">{{ countdown }}s</template>
+                    <template v-else-if="codeSending">发送中...</template>
+                    <template v-else>获取验证码</template>
+                </el-button>
+            </div>
         </el-form-item>
-        <el-form-item prop="email">
-            <el-input v-model="form.email" placeholder="请输入邮箱(可选)" size="large" class="h-12" :prefix-icon="Message" />
+        <el-form-item prop="code">
+            <el-input v-model="form.code" placeholder="请输入6位验证码" size="large" maxlength="6" class="h-12"
+                :prefix-icon="Lock" />
         </el-form-item>
         <el-form-item prop="password">
             <el-input v-model="form.password" type="password" placeholder="请输入密码" size="large" class="h-12"
-                :prefix-icon="Lock" show-password />
-        </el-form-item>
-        <el-form-item prop="confirmPassword">
-            <el-input v-model="form.confirmPassword" type="password" placeholder="请确认密码" size="large" class="h-12"
                 :prefix-icon="Lock" show-password />
         </el-form-item>
         <el-form-item class="pt-4">
@@ -33,9 +40,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { User, Lock, Iphone, Message } from '@element-plus/icons-vue'
+import { User, Lock, Iphone } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { registerApi } from '@/apis/user'
+import { registerApi, sendCodeApi } from '@/apis/user'
 import type { FormInstance } from 'element-plus'
 
 const emit = defineEmits<{
@@ -47,21 +54,13 @@ const formRef = ref<FormInstance>()
 const form = ref({
     name: '',
     phone: '',
-    email: '',
+    code: '',
     password: '',
-    confirmPassword: '',
 })
 const loading = ref(false)
-
-const validateConfirmPassword = (_rule: any, value: string, callback: any) => {
-    if (value === '') {
-        callback(new Error('请确认密码'))
-    } else if (value !== form.value.password) {
-        callback(new Error('两次输入的密码不一致'))
-    } else {
-        callback()
-    }
-}
+const codeSending = ref(false)
+const countdown = ref(0)
+let countdownTimer: ReturnType<typeof setInterval> | null = null
 
 const rules = {
     name: [
@@ -72,17 +71,46 @@ const rules = {
         { required: true, message: '请输入手机号', trigger: 'blur' },
         { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
     ],
-    email: [
-        { pattern: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/, message: '请输入正确的邮箱格式', trigger: 'blur' },
+    code: [
+        { required: true, message: '请输入验证码', trigger: 'blur' },
+        { pattern: /^\d{6}$/, message: '验证码为6位数字', trigger: 'blur' },
     ],
     password: [
         { required: true, message: '请输入密码', trigger: 'blur' },
         { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
     ],
-    confirmPassword: [
-        { required: true, message: '请确认密码', trigger: 'blur' },
-        { validator: validateConfirmPassword, trigger: 'blur' },
-    ],
+}
+
+function startCountdown(seconds: number) {
+    countdown.value = seconds
+    countdownTimer = setInterval(() => {
+        countdown.value--
+        if (countdown.value <= 0) {
+            if (countdownTimer) clearInterval(countdownTimer)
+            countdownTimer = null
+        }
+    }, 1000)
+}
+
+const handleSendCode = async () => {
+    if (!formRef.value) return
+    const valid = await formRef.value.validateField('phone').catch(() => false)
+    if (!valid) return
+
+    codeSending.value = true
+    try {
+        const res = await sendCodeApi(form.value.phone)
+        if (res.success) {
+            ElMessage.success('验证码已发送')
+            startCountdown(60)
+        } else {
+            ElMessage.error(res.message || '发送失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '发送失败，请稍后重试')
+    } finally {
+        codeSending.value = false
+    }
 }
 
 const handleRegister = async () => {
@@ -94,8 +122,8 @@ const handleRegister = async () => {
         const res = await registerApi({
             name: form.value.name,
             phone: form.value.phone,
-            email: form.value.email || undefined,
             password: form.value.password,
+            code: form.value.code,
         })
         if (res.success) {
             ElMessage.success('注册成功，请登录')

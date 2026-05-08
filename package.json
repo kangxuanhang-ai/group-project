@@ -1,6 +1,6 @@
 {
 	"pnpm": {
-		"onlyBuiltDependencies": ["@prisma/engines", "prisma", "@nestjs/core"]
+		"onlyBuiltDependencies": ["@prisma/engines", "prisma", "@nestjs/core", "@alicloud/openapi-core"]
 	},
 	"scripts": {
 		"web": "pnpm --filter @en/web dev",

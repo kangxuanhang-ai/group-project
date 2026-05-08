@@ -2,3 +2,6 @@ packages:
   - 'apps/*'
   - 'server'
   - 'packages/*'
+allowBuilds:
+  '[': true
+  ']': true
