@@ -4,7 +4,7 @@ import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres';
 import { ConfigService } from '@nestjs/config';
 
 // ===================== 配置常量 =====================
-const DATABASE_URL = 'postgresql://postgres:root@localhost:5432/langchain';
+const DATABASE_URL = 'postgresql://postgres:123456@localhost:5432/english';
 const DEEPSEEK_API_KEY = 'sk-618ccd021cfc41e89ea5422db6533da6';
 const DEEPSEEK_API_MODEL = 'deepseek-chat';
 const DEEPSEEK_REASONER_API_MODEL = 'deepseek-reasoner';
