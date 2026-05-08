@@ -15,6 +15,7 @@
 		"@types/md5": "^2.3.6",
 		"concurrently": "^9.2.1",
 		"dayjs": "^1.11.19",
+		"marked": "^17.0.6",
 		"md5": "^2.3.0"
 	},
 	"devDependencies": {

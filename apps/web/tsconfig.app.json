@@ -5,7 +5,7 @@
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
-    "types": ["element-plus/global"],
+    "types": ["element-plus/global", "dom-speech-recognition"],
     "paths": {
       "@/*": ["./src/*"]
     }
