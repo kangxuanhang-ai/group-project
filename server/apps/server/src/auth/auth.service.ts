@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '@libs/shared';
 import { ResponseService } from '@libs/shared';
+import { SmsService } from './sms.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import type { TokenPayload, RefreshTokenPayload } from '@en/common/user';
@@ -14,9 +15,19 @@ export class AuthService {
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         private readonly response: ResponseService,
+        private readonly smsService: SmsService,
     ) { }
 
+    async sendCode(phone: string) {
+        return this.smsService.sendCode(phone);
+    }
+
     async register(dto: RegisterDto) {
+        const verifyResult = await this.smsService.verifyCode(dto.phone, dto.code);
+        if (!verifyResult.success) {
+            return this.response.error(null, verifyResult.message, 400);
+        }
+
         const existingPhone = await this.prisma.user.findUnique({ where: { phone: dto.phone } })
         if (existingPhone) return this.response.error(null, '该手机号已注册', 400)
 

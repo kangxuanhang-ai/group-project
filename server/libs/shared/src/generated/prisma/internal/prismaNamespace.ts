@@ -389,7 +389,8 @@ export const ModelName = {
   WordBook: 'WordBook',
   PaymentRecord: 'PaymentRecord',
   CourseRecord: 'CourseRecord',
-  Course: 'Course'
+  Course: 'Course',
+  SmsCode: 'SmsCode'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "wordBookRecord" | "wordBook" | "paymentRecord" | "courseRecord" | "course"
+    modelProps: "user" | "wordBookRecord" | "wordBook" | "paymentRecord" | "courseRecord" | "course" | "smsCode"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SmsCode: {
+      payload: Prisma.$SmsCodePayload<ExtArgs>
+      fields: Prisma.SmsCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SmsCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SmsCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        findFirst: {
+          args: Prisma.SmsCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SmsCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        findMany: {
+          args: Prisma.SmsCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>[]
+        }
+        create: {
+          args: Prisma.SmsCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        createMany: {
+          args: Prisma.SmsCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SmsCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>[]
+        }
+        delete: {
+          args: Prisma.SmsCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        update: {
+          args: Prisma.SmsCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.SmsCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SmsCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SmsCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.SmsCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SmsCodePayload>
+        }
+        aggregate: {
+          args: Prisma.SmsCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSmsCode>
+        }
+        groupBy: {
+          args: Prisma.SmsCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SmsCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SmsCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SmsCodeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -996,6 +1071,20 @@ export const CourseScalarFieldEnum = {
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const SmsCodeScalarFieldEnum = {
+  id: 'id',
+  phone: 'phone',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SmsCodeScalarFieldEnum = (typeof SmsCodeScalarFieldEnum)[keyof typeof SmsCodeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1234,6 +1323,7 @@ export type GlobalOmitConfig = {
   paymentRecord?: Prisma.PaymentRecordOmit
   courseRecord?: Prisma.CourseRecordOmit
   course?: Prisma.CourseOmit
+  smsCode?: Prisma.SmsCodeOmit
 }
 
 /* Types for Logging */

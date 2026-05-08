@@ -9,3 +9,5 @@ allowBuilds:
   prisma: false
   unrs-resolver: false
   vue-demi: false
+  '[': true
+  ']': true

@@ -17,4 +17,8 @@ export class RegisterDto {
     @MinLength(6)
     @MaxLength(16)
     password: string
+
+    @IsString()
+    @Matches(/^\d{6}$/, { message: '验证码为6位数字' })
+    code: string
 }
