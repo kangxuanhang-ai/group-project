@@ -93,6 +93,7 @@ model WordBook {
 model PaymentRecord {
   id            String         @id @default(cuid()) // 支付ID
   userId        String // 用户ID
+  courseId      String? // 课程ID
   tradeNo       String? // 支付宝交易号
   outTradeNo    String         @unique // 订单编号
   amount        Decimal // 支付金额

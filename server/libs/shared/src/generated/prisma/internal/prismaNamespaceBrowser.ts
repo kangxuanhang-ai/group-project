@@ -145,6 +145,7 @@ export type WordBookScalarFieldEnum = (typeof WordBookScalarFieldEnum)[keyof typ
 export const PaymentRecordScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  courseId: 'courseId',
   tradeNo: 'tradeNo',
   outTradeNo: 'outTradeNo',
   amount: 'amount',

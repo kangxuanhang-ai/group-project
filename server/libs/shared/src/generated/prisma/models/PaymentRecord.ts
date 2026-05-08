@@ -37,6 +37,7 @@ export type PaymentRecordSumAggregateOutputType = {
 export type PaymentRecordMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  courseId: string | null
   tradeNo: string | null
   outTradeNo: string | null
   amount: runtime.Decimal | null
@@ -51,6 +52,7 @@ export type PaymentRecordMinAggregateOutputType = {
 export type PaymentRecordMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  courseId: string | null
   tradeNo: string | null
   outTradeNo: string | null
   amount: runtime.Decimal | null
@@ -65,6 +67,7 @@ export type PaymentRecordMaxAggregateOutputType = {
 export type PaymentRecordCountAggregateOutputType = {
   id: number
   userId: number
+  courseId: number
   tradeNo: number
   outTradeNo: number
   amount: number
@@ -89,6 +92,7 @@ export type PaymentRecordSumAggregateInputType = {
 export type PaymentRecordMinAggregateInputType = {
   id?: true
   userId?: true
+  courseId?: true
   tradeNo?: true
   outTradeNo?: true
   amount?: true
@@ -103,6 +107,7 @@ export type PaymentRecordMinAggregateInputType = {
 export type PaymentRecordMaxAggregateInputType = {
   id?: true
   userId?: true
+  courseId?: true
   tradeNo?: true
   outTradeNo?: true
   amount?: true
@@ -117,6 +122,7 @@ export type PaymentRecordMaxAggregateInputType = {
 export type PaymentRecordCountAggregateInputType = {
   id?: true
   userId?: true
+  courseId?: true
   tradeNo?: true
   outTradeNo?: true
   amount?: true
@@ -218,6 +224,7 @@ export type PaymentRecordGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type PaymentRecordGroupByOutputType = {
   id: string
   userId: string
+  courseId: string | null
   tradeNo: string | null
   outTradeNo: string
   amount: runtime.Decimal
@@ -255,6 +262,7 @@ export type PaymentRecordWhereInput = {
   NOT?: Prisma.PaymentRecordWhereInput | Prisma.PaymentRecordWhereInput[]
   id?: Prisma.StringFilter<"PaymentRecord"> | string
   userId?: Prisma.StringFilter<"PaymentRecord"> | string
+  courseId?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   tradeNo?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   outTradeNo?: Prisma.StringFilter<"PaymentRecord"> | string
   amount?: Prisma.DecimalFilter<"PaymentRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -271,6 +279,7 @@ export type PaymentRecordWhereInput = {
 export type PaymentRecordOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   tradeNo?: Prisma.SortOrderInput | Prisma.SortOrder
   outTradeNo?: Prisma.SortOrder
   amount?: Prisma.SortOrder
@@ -291,6 +300,7 @@ export type PaymentRecordWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PaymentRecordWhereInput[]
   NOT?: Prisma.PaymentRecordWhereInput | Prisma.PaymentRecordWhereInput[]
   userId?: Prisma.StringFilter<"PaymentRecord"> | string
+  courseId?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   tradeNo?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   amount?: Prisma.DecimalFilter<"PaymentRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   subject?: Prisma.StringFilter<"PaymentRecord"> | string
@@ -306,6 +316,7 @@ export type PaymentRecordWhereUniqueInput = Prisma.AtLeast<{
 export type PaymentRecordOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   tradeNo?: Prisma.SortOrderInput | Prisma.SortOrder
   outTradeNo?: Prisma.SortOrder
   amount?: Prisma.SortOrder
@@ -328,6 +339,7 @@ export type PaymentRecordScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PaymentRecordScalarWhereWithAggregatesInput | Prisma.PaymentRecordScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PaymentRecord"> | string
   userId?: Prisma.StringWithAggregatesFilter<"PaymentRecord"> | string
+  courseId?: Prisma.StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
   tradeNo?: Prisma.StringNullableWithAggregatesFilter<"PaymentRecord"> | string | null
   outTradeNo?: Prisma.StringWithAggregatesFilter<"PaymentRecord"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"PaymentRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -341,6 +353,7 @@ export type PaymentRecordScalarWhereWithAggregatesInput = {
 
 export type PaymentRecordCreateInput = {
   id?: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -357,6 +370,7 @@ export type PaymentRecordCreateInput = {
 export type PaymentRecordUncheckedCreateInput = {
   id?: string
   userId: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -371,6 +385,7 @@ export type PaymentRecordUncheckedCreateInput = {
 
 export type PaymentRecordUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -387,6 +402,7 @@ export type PaymentRecordUpdateInput = {
 export type PaymentRecordUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -402,6 +418,7 @@ export type PaymentRecordUncheckedUpdateInput = {
 export type PaymentRecordCreateManyInput = {
   id?: string
   userId: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -415,6 +432,7 @@ export type PaymentRecordCreateManyInput = {
 
 export type PaymentRecordUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -429,6 +447,7 @@ export type PaymentRecordUpdateManyMutationInput = {
 export type PaymentRecordUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -453,6 +472,7 @@ export type PaymentRecordOrderByRelationAggregateInput = {
 export type PaymentRecordCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  courseId?: Prisma.SortOrder
   tradeNo?: Prisma.SortOrder
   outTradeNo?: Prisma.SortOrder
   amount?: Prisma.SortOrder
@@ -471,6 +491,7 @@ export type PaymentRecordAvgOrderByAggregateInput = {
 export type PaymentRecordMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  courseId?: Prisma.SortOrder
   tradeNo?: Prisma.SortOrder
   outTradeNo?: Prisma.SortOrder
   amount?: Prisma.SortOrder
@@ -485,6 +506,7 @@ export type PaymentRecordMaxOrderByAggregateInput = {
 export type PaymentRecordMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  courseId?: Prisma.SortOrder
   tradeNo?: Prisma.SortOrder
   outTradeNo?: Prisma.SortOrder
   amount?: Prisma.SortOrder
@@ -577,6 +599,7 @@ export type PaymentRecordUpdateOneWithoutCourseRecordsNestedInput = {
 
 export type PaymentRecordCreateWithoutUserInput = {
   id?: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -591,6 +614,7 @@ export type PaymentRecordCreateWithoutUserInput = {
 
 export type PaymentRecordUncheckedCreateWithoutUserInput = {
   id?: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -635,6 +659,7 @@ export type PaymentRecordScalarWhereInput = {
   NOT?: Prisma.PaymentRecordScalarWhereInput | Prisma.PaymentRecordScalarWhereInput[]
   id?: Prisma.StringFilter<"PaymentRecord"> | string
   userId?: Prisma.StringFilter<"PaymentRecord"> | string
+  courseId?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   tradeNo?: Prisma.StringNullableFilter<"PaymentRecord"> | string | null
   outTradeNo?: Prisma.StringFilter<"PaymentRecord"> | string
   amount?: Prisma.DecimalFilter<"PaymentRecord"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -648,6 +673,7 @@ export type PaymentRecordScalarWhereInput = {
 
 export type PaymentRecordCreateWithoutCourseRecordsInput = {
   id?: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -663,6 +689,7 @@ export type PaymentRecordCreateWithoutCourseRecordsInput = {
 export type PaymentRecordUncheckedCreateWithoutCourseRecordsInput = {
   id?: string
   userId: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -692,6 +719,7 @@ export type PaymentRecordUpdateToOneWithWhereWithoutCourseRecordsInput = {
 
 export type PaymentRecordUpdateWithoutCourseRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -707,6 +735,7 @@ export type PaymentRecordUpdateWithoutCourseRecordsInput = {
 export type PaymentRecordUncheckedUpdateWithoutCourseRecordsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -720,6 +749,7 @@ export type PaymentRecordUncheckedUpdateWithoutCourseRecordsInput = {
 
 export type PaymentRecordCreateManyUserInput = {
   id?: string
+  courseId?: string | null
   tradeNo?: string | null
   outTradeNo: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -733,6 +763,7 @@ export type PaymentRecordCreateManyUserInput = {
 
 export type PaymentRecordUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -747,6 +778,7 @@ export type PaymentRecordUpdateWithoutUserInput = {
 
 export type PaymentRecordUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -761,6 +793,7 @@ export type PaymentRecordUncheckedUpdateWithoutUserInput = {
 
 export type PaymentRecordUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tradeNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outTradeNo?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -806,6 +839,7 @@ export type PaymentRecordCountOutputTypeCountCourseRecordsArgs<ExtArgs extends r
 export type PaymentRecordSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  courseId?: boolean
   tradeNo?: boolean
   outTradeNo?: boolean
   amount?: boolean
@@ -823,6 +857,7 @@ export type PaymentRecordSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type PaymentRecordSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  courseId?: boolean
   tradeNo?: boolean
   outTradeNo?: boolean
   amount?: boolean
@@ -838,6 +873,7 @@ export type PaymentRecordSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type PaymentRecordSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  courseId?: boolean
   tradeNo?: boolean
   outTradeNo?: boolean
   amount?: boolean
@@ -853,6 +889,7 @@ export type PaymentRecordSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type PaymentRecordSelectScalar = {
   id?: boolean
   userId?: boolean
+  courseId?: boolean
   tradeNo?: boolean
   outTradeNo?: boolean
   amount?: boolean
@@ -864,7 +901,7 @@ export type PaymentRecordSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PaymentRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "tradeNo" | "outTradeNo" | "amount" | "subject" | "body" | "tradeStatus" | "sendPayTime" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentRecord"]>
+export type PaymentRecordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "tradeNo" | "outTradeNo" | "amount" | "subject" | "body" | "tradeStatus" | "sendPayTime" | "createdAt" | "updatedAt", ExtArgs["result"]["paymentRecord"]>
 export type PaymentRecordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   courseRecords?: boolean | Prisma.PaymentRecord$courseRecordsArgs<ExtArgs>
@@ -886,6 +923,7 @@ export type $PaymentRecordPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    courseId: string | null
     tradeNo: string | null
     outTradeNo: string
     amount: runtime.Decimal
@@ -1322,6 +1360,7 @@ export interface Prisma__PaymentRecordClient<T, Null = never, ExtArgs extends ru
 export interface PaymentRecordFieldRefs {
   readonly id: Prisma.FieldRef<"PaymentRecord", 'String'>
   readonly userId: Prisma.FieldRef<"PaymentRecord", 'String'>
+  readonly courseId: Prisma.FieldRef<"PaymentRecord", 'String'>
   readonly tradeNo: Prisma.FieldRef<"PaymentRecord", 'String'>
   readonly outTradeNo: Prisma.FieldRef<"PaymentRecord", 'String'>
   readonly amount: Prisma.FieldRef<"PaymentRecord", 'Decimal'>
