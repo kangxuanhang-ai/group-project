@@ -5,31 +5,17 @@
                 class="text-2xl font-bold bg-indigo-700 text-white rounded-[10px] px-2 py-1 w-10 flex items-center justify-center h-10 ">
                 E</div>
             <div class="text-2xl font-bold">English App</div>
-            <div @click="router.push('/')"
-                class="flex items-center gap-2 cursor-pointer rounded-[10px] px-2 py-1 text-gray-500">
+            <div v-for="item in navItems" :key="item.path" @click="router.push(item.path)"
+                :class="[
+                    'flex items-center gap-2 cursor-pointer rounded-[10px] px-3 py-1.5 transition-all duration-200',
+                    currentPath === item.path
+                        ? 'bg-indigo-50 text-indigo-600 font-semibold'
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                ]">
                 <el-icon>
-                    <HomeFilled />
-                </el-icon> <span>主页</span>
-            </div>
-            <div @click="router.push('/chat/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
-                <el-icon>
-                    <MagicStick />
-                </el-icon> <span>聊天</span>
-            </div>
-            <div @click="router.push('/word-book/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
-                <el-icon>
-                    <Notebook />
-                </el-icon> <span>词库</span>
-            </div>
-            <div @click="router.push('/courses/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
-                <el-icon>
-                    <Reading />
-                </el-icon> <span>课程</span>
-            </div>
-            <div @click="router.push('/setting/index')" class="flex items-center gap-2 cursor-pointer text-gray-500">
-                <el-icon>
-                    <Setting />
-                </el-icon> <span>设置</span>
+                    <component :is="item.icon" />
+                </el-icon>
+                <span>{{ item.label }}</span>
             </div>
             <div class="flex items-center gap-2 bg-blue-200 text-blue-700 rounded-full px-2 py-1"><el-icon>
                     <Sunny />
@@ -60,15 +46,27 @@
 
 <script setup lang="ts">
 import { Sunny, Star, HomeFilled, Notebook, MagicStick, Reading, Setting, User } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useLogin } from '@/hooks/useLogin';
+import { computed } from 'vue';
 
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const { login } = useLogin()
+
+const currentPath = computed(() => route.path)
+
+const navItems = [
+  { path: '/', label: '主页', icon: HomeFilled },
+  { path: '/chat/index', label: '聊天', icon: MagicStick },
+  { path: '/word-book/index', label: '词库', icon: Notebook },
+  { path: '/courses/index', label: '课程', icon: Reading },
+  { path: '/setting/index', label: '设置', icon: Setting },
+]
 
 const handleLogout = async () => {
     await ElMessageBox.confirm('确定要退出登录吗？', '提示', {

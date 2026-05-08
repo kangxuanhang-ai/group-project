@@ -1,15 +1,15 @@
-import { ChatDeepSeek } from "@langchain/deepseek";
-import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+import { ChatDeepSeek } from '@langchain/deepseek';
+import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres';
 // 修复：导入 ConfigService（NestJS 环境）
 import { ConfigService } from '@nestjs/config';
 
 // ===================== 配置常量 =====================
-const DATABASE_URL = "postgresql://postgres:12345678@localhost:5432/langchain";
-const DEEPSEEK_API_KEY = "sk-618ccd021cfc41e89ea5422db6533da6";
-const DEEPSEEK_API_MODEL = "deepseek-chat";
-const DEEPSEEK_REASONER_API_MODEL = "deepseek-reasoner";
-const BOCHA_SEARCH_URL = "https://api.bochaai.com/v1/web-search";
-const BOCHA_API_KEY = "sk-77d284097eff496db8c11ecc7ef22b90";
+const DATABASE_URL = 'postgresql://postgres:root@localhost:5432/langchain';
+const DEEPSEEK_API_KEY = 'sk-618ccd021cfc41e89ea5422db6533da6';
+const DEEPSEEK_API_MODEL = 'deepseek-chat';
+const DEEPSEEK_REASONER_API_MODEL = 'deepseek-reasoner';
+const BOCHA_SEARCH_URL = 'https://api.bochaai.com/v1/web-search';
+const BOCHA_API_KEY = 'sk-77d284097eff496db8c11ecc7ef22b90';
 
 // ===================== 初始化 DeepSeek 普通模型 =====================
 export const createDeepSeek = () => {
@@ -26,7 +26,9 @@ export const createDeepSeek = () => {
 export const createDeepSeekReasoner = (configService: ConfigService) => {
   return new ChatDeepSeek({
     apiKey: configService.get<string>('DEEPSEEK_API_KEY') || DEEPSEEK_API_KEY,
-    model: configService.get<string>('DEEPSEEK_REASONER_API_MODEL') || DEEPSEEK_REASONER_API_MODEL,
+    model:
+      configService.get<string>('DEEPSEEK_REASONER_API_MODEL') ||
+      DEEPSEEK_REASONER_API_MODEL,
     temperature: 1.3,
     maxTokens: 18000,
     streaming: true,
@@ -45,33 +47,36 @@ export const createCheckpoint = async () => {
 export const createBochaSearch = async (
   configService: ConfigService,
   query: string,
-  count: number = 10
+  count: number = 10,
 ) => {
   const result = await fetch(
     configService.get<string>('BOCHA_SEARCH_URL') || BOCHA_SEARCH_URL,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${configService.get<string>('BOCHA_API_KEY') || BOCHA_API_KEY}`
+        Authorization: `Bearer ${configService.get<string>('BOCHA_API_KEY') || BOCHA_API_KEY}`,
       },
       body: JSON.stringify({
         query,
         count,
         summary: true,
-      })
-    }
+      }),
+    },
   );
-  const { data } = await result.json()
+  const { data } = await result.json();
   const values = data.webPages.value;
-  const prompt = values.map(item => `
-标题: ${item.name}
-链接: ${item.url}
-摘要: ${item?.summary?.replace(/\n/g, '') ?? ''}
-网站名称: ${item.siteName}
-网站logo: ${item.siteIcon}
-发布时间: ${item.dateLastCrawled}
-`).join('\n')
-  return prompt
-
+  const prompt = values
+    .map(
+      (item) => `
+        标题: ${item.name}
+        链接: ${item.url}
+        摘要: ${item?.summary?.replace(/\n/g, '') ?? ''}
+        网站名称: ${item.siteName}
+        网站logo: ${item.siteIcon}
+        发布时间: ${item.dateLastCrawled}
+        `,
+    )
+    .join('\n');
+  return prompt;
 };

@@ -24,7 +24,11 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
+<<<<<<< HEAD
         run: pnpm install --ignore-scripts=false
+=======
+        run: pnpm install
+>>>>>>> feature/DoLogin8
 
       - name: Build frontend
         run: pnpm --filter @en/web build
@@ -36,7 +40,7 @@ jobs:
         working-directory: server
         run: npx prisma generate
         env:
-          DATABASE_URL: "mysql://root:password@localhost:3306/placeholder_db"
+          DATABASE_URL: "postgresql://postgres:placeholder@localhost:5432/placeholder_db"
 
       - name: Prepare deploy artifacts
         run: |
@@ -80,6 +84,7 @@ jobs:
             #!/bin/bash
             set -e
             cd /opt/english-app
+<<<<<<< HEAD
 
             # --- 核心修复：彻底关闭服务器端 pnpm 的安全拦截，允许 Prisma 正常构建 ---
             pnpm config set ignore-scripts false
@@ -88,6 +93,14 @@ jobs:
             pnpm install --prod --frozen-lockfile
 
             # --- 数据库迁移 ---
+=======
+            
+            # 确保 pnpm 全局可用 (如果服务器报错找不到 pnpm)
+            # export PATH=$PATH:/root/.local/share/pnpm
+            
+            pnpm install --prod
+            
+>>>>>>> feature/DoLogin8
             cd server
             npx prisma migrate deploy
             cd ..

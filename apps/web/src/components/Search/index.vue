@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, customRef } from 'vue'
+import { ref, customRef, onUnmounted } from 'vue'
 import { Search, CopyDocument } from '@element-plus/icons-vue'
 import { getWordBookList } from '@/apis/word-book'
 import type { Word } from '@en/common/word'
@@ -97,6 +97,9 @@ const handleKeydown = (e: KeyboardEvent) => {
 }
 
 window.addEventListener('keydown', handleKeydown)
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <style scoped>
