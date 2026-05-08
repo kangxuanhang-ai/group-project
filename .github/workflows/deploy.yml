@@ -24,7 +24,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build frontend
         run: pnpm --filter @en/web build
@@ -37,7 +37,7 @@ jobs:
         working-directory: server
         run: npx prisma generate
         env:
-          DATABASE_URL: "mysql://root:password@localhost:3306/placeholder_db"
+          DATABASE_URL: "postgresql://postgres:placeholder@localhost:5432/placeholder_db"
 
       # --- 关键修复 2：打包所有要发送的文件 (使用更鲁棒的拷贝方式) ---
       - name: Prepare deploy artifacts
@@ -94,7 +94,7 @@ jobs:
             # 确保 pnpm 全局可用 (如果服务器报错找不到 pnpm)
             # export PATH=$PATH:/root/.local/share/pnpm
             
-            pnpm install --prod --frozen-lockfile
+            pnpm install --prod
             
             cd server
             # 运行数据库迁移

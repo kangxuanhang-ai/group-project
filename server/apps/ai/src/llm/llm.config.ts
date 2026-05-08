@@ -1,11 +1,9 @@
-import { ChatDeepSeek } from "@langchain/deepseek";
-import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+import { ChatDeepSeek } from '@langchain/deepseek';
+import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres';
 
-
-const DATABASE_URL = "postgresql://postgres:12345678@localhost:5432/langchain";
-const DEEPSEEK_API_KEY = "sk-618ccd021cfc41e89ea5422db6533da6";
-const DEEPSEEK_API_MODEL = "deepseek-chat";
-
+const DATABASE_URL = 'postgresql://postgres:root@localhost:5432/langchain';
+const DEEPSEEK_API_KEY = 'sk-618ccd021cfc41e89ea5422db6533da6';
+const DEEPSEEK_API_MODEL = 'deepseek-chat';
 
 // 初始化 DeepSeek 模型
 export const createDeepSeek = () => {

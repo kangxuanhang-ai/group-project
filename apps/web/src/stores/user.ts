@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Token, ResultUser } from '@en/common/user'
 import { refreshApi } from '@/apis/refresh'
@@ -71,13 +71,6 @@ export const useUserStore = defineStore('user', () => {
       isChecking.value = false
     }
   }
-
-  // token 被持久化插件恢复时自动检查是否过期
-  watch(token, (newToken) => {
-    if (newToken) {
-      checkAuth()
-    }
-  }, { immediate: true })
 
   return { token, user, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout, checkAuth }
 }, {
