@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 // ===================== 配置常量 =====================
 const DATABASE_URL = 'postgresql://postgres:root@localhost:5432/langchain';
-const DEEPSEEK_API_KEY = 'sk-618ccd021cfc41e89ea5422db6533da6';
+const DEEPSEEK_API_KEY = 'sk-0f8bd14e14a24ab2affff4e2c641150e';
 const DEEPSEEK_API_MODEL = 'deepseek-chat';
 const DEEPSEEK_REASONER_API_MODEL = 'deepseek-reasoner';
 const BOCHA_SEARCH_URL = 'https://api.bochaai.com/v1/web-search';
