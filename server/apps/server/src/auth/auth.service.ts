@@ -80,11 +80,11 @@ export class AuthService {
         return {
             accessToken: this.jwtService.sign<RefreshTokenPayload>(
                 { ...payload, tokenType: 'access' },
-                { expiresIn: '7d' },
+                { expiresIn: '30m' },
             ),
             refreshToken: this.jwtService.sign<RefreshTokenPayload>(
                 { ...payload, tokenType: 'refresh' },
-                { expiresIn: '30d' },
+                { expiresIn: '7d' },
             ),
         }
     }

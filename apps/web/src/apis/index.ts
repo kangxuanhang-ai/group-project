@@ -12,20 +12,23 @@ export const serverApi = axios.create({
     timeout,
 })
 
-let requestQueue: ((newAccessToken: string) => void)[] = []
-let isRefreshing = false
-
-serverApi.interceptors.request.use(config => {
-    const userStore = useUserStore()
-    if (userStore.getAccessToken) {
-        config.headers.Authorization = `Bearer ${userStore.getAccessToken}`
-    }
-    return config
+// AI 服务 API 实例
+export const aiApi = axios.create({
+    baseURL: '/ai/v1',
+    timeout,
 })
 
-serverApi.interceptors.response.use(res => {
-    return res.data
-}, async error => {
+interface QueueItem {
+    resolve: (value: any) => void
+    reject: (reason: any) => void
+    config: any
+    api: typeof serverApi
+}
+
+let requestQueue: QueueItem[] = []
+let isRefreshing = false
+
+async function handleRefreshError(error: any, api: typeof serverApi) {
     if (error.response?.status !== 401) {
         return Promise.reject(error)
     }
@@ -42,11 +45,8 @@ serverApi.interceptors.response.use(res => {
     }
 
     if (isRefreshing) {
-        return new Promise((resolve) => {
-            requestQueue.push((newAccessToken: string) => {
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
-                resolve(serverApi(originalRequest))
-            })
+        return new Promise((resolve, reject) => {
+            requestQueue.push({ resolve, reject, config: originalRequest, api })
         })
     }
 
@@ -55,15 +55,20 @@ serverApi.interceptors.response.use(res => {
         const res: Response<Token> = await refreshApi.post('/auth/refresh', { refreshToken }) as any
         if (res.success) {
             userStore.updateToken(res.data)
-            requestQueue.forEach(callback => callback(res.data.accessToken))
+            requestQueue.forEach(item => {
+                item.config.headers.Authorization = `Bearer ${res.data.accessToken}`
+                item.resolve(item.api(item.config))
+            })
             originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`
-            return serverApi(originalRequest)
+            return api(originalRequest)
         } else {
+            requestQueue.forEach(item => item.reject(error))
             userStore.logout()
             router.replace('/')
             return Promise.reject(error)
         }
     } catch {
+        requestQueue.forEach(item => item.reject(error))
         userStore.logout()
         router.replace('/')
         return Promise.reject(error)
@@ -71,17 +76,25 @@ serverApi.interceptors.response.use(res => {
         requestQueue = []
         isRefreshing = false
     }
-})
+}
 
-// AI 服务 API 实例
-export const aiApi = axios.create({
-    baseURL: '/ai/v1',
-    timeout,
-})
+// 通用请求拦截器（注入 Bearer token）
+const authRequestInterceptor = (config: any) => {
+    const userStore = useUserStore()
+    if (userStore.getAccessToken) {
+        config.headers.Authorization = `Bearer ${userStore.getAccessToken}`
+    }
+    return config
+}
 
-aiApi.interceptors.response.use(res => {
-    return res.data
-})
+// 通用响应成功拦截器（解包 data）
+const responseSuccessInterceptor = (res: any) => res.data
+
+serverApi.interceptors.request.use(authRequestInterceptor)
+serverApi.interceptors.response.use(responseSuccessInterceptor, (error) => handleRefreshError(error, serverApi))
+
+aiApi.interceptors.request.use(authRequestInterceptor)
+aiApi.interceptors.response.use(responseSuccessInterceptor, (error) => handleRefreshError(error, aiApi))
 
 export interface Response<T = any> {
     timestamp: string,

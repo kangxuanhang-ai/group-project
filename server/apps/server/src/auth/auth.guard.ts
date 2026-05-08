@@ -19,10 +19,14 @@ export class AuthGuard implements CanActivate {
         }
 
         try {
-            const decoded = this.jwtService.verify(token)
+            const decoded = this.jwtService.verify<{ tokenType: string }>(token)
+            if (decoded.tokenType !== 'access') {
+                throw new UnauthorizedException('无效的访问令牌')
+            }
             request.user = decoded
             return true
-        } catch {
+        } catch (err) {
+            if (err instanceof UnauthorizedException) throw err
             throw new UnauthorizedException('token已过期或无效')
         }
     }
