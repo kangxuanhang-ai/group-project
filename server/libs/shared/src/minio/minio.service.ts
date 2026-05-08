@@ -15,28 +15,31 @@ export class MinioService implements OnModuleInit {
         })
     }
     async onModuleInit() {
-        const bucket = this.configService.get<string>('MINIO_BUCKET')!
-        const exists = await this.minioClient.bucketExists(bucket)
-        if(!exists){
-            await this.minioClient.makeBucket(bucket)
-            await this.minioClient.setBucketPolicy(bucket,JSON.stringify({
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Sid" :"PublicReadObjects",
-                        "Effect" :"Allow",
-                        "Principal":"*",
-                        "Action": [
-                            "s3:GetObject"
-                        ],
-                        "Resource": [
-                            "arn:aws:s3:::avatar/*"
-                        ]
-                    }
-                ]
-            }))
+        try {
+            const bucket = this.configService.get<string>('MINIO_BUCKET')!
+            const exists = await this.minioClient.bucketExists(bucket)
+            if(!exists){
+                await this.minioClient.makeBucket(bucket)
+                await this.minioClient.setBucketPolicy(bucket,JSON.stringify({
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid" :"PublicReadObjects",
+                            "Effect" :"Allow",
+                            "Principal":"*",
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::avatar/*"
+                            ]
+                        }
+                    ]
+                }))
+            }
+        } catch (error) {
+            console.warn('MinIO not available, skipping bucket creation. Error:', error)
         }
-        
     }
     getClient(){
         return this.minioClient
