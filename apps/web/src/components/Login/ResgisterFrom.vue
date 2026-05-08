@@ -6,12 +6,15 @@
     <el-form ref="formRef" :model="form" :rules="rules" label-width="80" label-position="top" class="space-y-6"
         @submit.prevent="handleRegister">
         <el-form-item prop="name">
-            <el-input v-model="form.name" placeholder="请输入用户名" size="large" class="h-12" :prefix-icon="User" />
+            <el-input v-model="form.name" placeholder="请输入用户名" size="large" class="h-12" :prefix-icon="User"
+                @focus="emit('update-status', { isTyping: true })"
+                @blur="emit('update-status', { isTyping: false })" />
         </el-form-item>
         <el-form-item prop="phone">
             <div class="flex w-full gap-3">
                 <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12 flex-1"
-                    :prefix-icon="Iphone" />
+                    :prefix-icon="Iphone" @focus="emit('update-status', { isTyping: true })"
+                    @blur="emit('update-status', { isTyping: false })" />
                 <el-button size="large" :disabled="codeSending || countdown > 0" class="h-12 px-5 shrink-0"
                     @click="handleSendCode"
                     :class="countdown > 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'">
@@ -23,11 +26,28 @@
         </el-form-item>
         <el-form-item prop="code">
             <el-input v-model="form.code" placeholder="请输入6位验证码" size="large" maxlength="6" class="h-12"
-                :prefix-icon="Lock" />
+                :prefix-icon="Lock" @focus="emit('update-status', { isTyping: true })"
+                @blur="emit('update-status', { isTyping: false })" />
         </el-form-item>
         <el-form-item prop="password">
-            <el-input v-model="form.password" type="password" placeholder="请输入密码" size="large" class="h-12"
-                :prefix-icon="Lock" show-password />
+            <el-input v-model="form.password" :type="passwordFieldType" placeholder="请输入密码" size="large" class="h-12"
+                :prefix-icon="Lock" @input="onPasswordInput" @focus="emit('update-status', { isTyping: true })"
+                @blur="emit('update-status', { isTyping: false })">
+                <template #suffix>
+                    <span class="cursor-pointer flex items-center h-full px-1" @click="togglePasswordVisible">
+                        <svg v-if="!passwordVisible" class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M2 12C3.8 8.5 7.4 6 12 6C16.6 6 20.2 8.5 22 12C20.2 15.5 16.6 18 12 18C7.4 18 3.8 15.5 2 12Z" stroke-linejoin="round"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg v-else class="w-5 h-5 text-gray-400 hover:text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M3 3L21 21" stroke-linecap="round"/>
+                            <path d="M10.58 10.58A2 2 0 0013.42 13.42" stroke-linecap="round"/>
+                            <path d="M9.88 5.09A10.94 10.94 0 0112 4.9C16.6 4.9 20.2 7.4 22 10.9A17.2 17.2 0 0118.91 15.1" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6.1 6.1C4.38 7.3 3 8.93 2 10.9C3.8 14.4 7.4 16.9 12 16.9C13.27 16.9 14.48 16.71 15.6 16.36" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </template>
+            </el-input>
         </el-form-item>
         <el-form-item class="pt-4">
             <el-button type="primary" size="large" native-type="submit" :loading="loading"
@@ -39,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { User, Lock, Iphone } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { registerApi, sendCodeApi } from '@/apis/user'
@@ -48,6 +68,7 @@ import type { FormInstance } from 'element-plus'
 const emit = defineEmits<{
     (e: 'success'): void
     (e: 'registered'): void
+    (e: 'update-status', status: { isTyping?: boolean; passwordLength?: number; showPassword?: boolean }): void
 }>()
 
 const formRef = ref<FormInstance>()
@@ -60,7 +81,10 @@ const form = ref({
 const loading = ref(false)
 const codeSending = ref(false)
 const countdown = ref(0)
+const passwordVisible = ref(false)
 let countdownTimer: ReturnType<typeof setInterval> | null = null
+
+const passwordFieldType = computed(() => passwordVisible.value ? 'text' : 'password')
 
 const rules = {
     name: [
@@ -79,6 +103,15 @@ const rules = {
         { required: true, message: '请输入密码', trigger: 'blur' },
         { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
     ],
+}
+
+const togglePasswordVisible = () => {
+    passwordVisible.value = !passwordVisible.value
+    emit('update-status', { showPassword: passwordVisible.value })
+}
+
+const onPasswordInput = (val: string) => {
+    emit('update-status', { passwordLength: val.length })
 }
 
 function startCountdown(seconds: number) {
