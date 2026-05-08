@@ -5,7 +5,7 @@
                 class="text-2xl font-bold bg-indigo-700 text-white rounded-[10px] px-2 py-1 w-10 flex items-center justify-center h-10 ">
                 E</div>
             <div class="text-2xl font-bold">English App</div>
-            <div v-for="item in navItems" :key="item.path" @click="router.push(item.path)"
+            <div v-for="item in navItems" :key="item.path" @click="gotoPath(item.path)"
                 :class="[
                     'flex items-center gap-2 cursor-pointer rounded-[10px] px-3 py-1.5 transition-all duration-200',
                     currentPath === item.path
@@ -23,10 +23,12 @@
             <div class="flex items-center gap-2 bg-amber-200 text-amber-700 rounded-full px-2 py-1"><el-icon>
                     <Star />
                 </el-icon> <span class="font-bold text-sm">{{ userStore.user?.dayNumber ?? 0 }}</span></div>
-            <el-dropdown v-if="userStore.isLoggedIn" trigger="click">
+                <el-popover :width="340">
+                    <template #reference>
+                        <el-dropdown v-if="userStore.isLoggedIn" trigger="click">
                 <div class="flex items-center gap-2 border-l cursor-pointer border-gray-200 pl-4">
                     <img class="w-10 h-10 rounded-full ml-2 mr-2"
-                        :src="userStore.user?.avatar || 'https://gips3.baidu.com/it/u=3493347002,3356558679&fm=3074&app=3074&f=PNG?w=2048&h=2048'" />
+                        :src="avatar" />
                     <span class="text-sm font-bold">{{ userStore.user?.name }}</span>
                 </div>
                 <template #dropdown>
@@ -36,10 +38,16 @@
                 </template>
             </el-dropdown>
             <div v-else @click="login()" class="flex items-center gap-2 border-l cursor-pointer border-gray-200 pl-4">
-                <el-icon :size="20"><User /></el-icon>
+                <img class="w-10 h-10 rounded-full ml-2 mr-2"
+                :src="avatar" />
                 <span class="text-sm font-bold text-gray-400">未登录</span>
             </div>
+                    </template>
+                    <Profile />
+                </el-popover>
+            
         </div>
+        
     </header>
 </template>
 
@@ -50,8 +58,15 @@ import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useLogin } from '@/hooks/useLogin';
 import { computed } from 'vue';
+import Profile from '../Profile/index.vue'
+import { useAvatar } from '@/hooks/useAvatar'
+const {avatar} = useAvatar()
+
+
+
 
 import { ElMessage, ElMessageBox } from 'element-plus'
+
 
 const router = useRouter()
 const route = useRoute()
@@ -61,12 +76,24 @@ const { login } = useLogin()
 const currentPath = computed(() => route.path)
 
 const navItems = [
-  { path: '/', label: '主页', icon: HomeFilled },
-  { path: '/chat/index', label: '聊天', icon: MagicStick },
-  { path: '/word-book/index', label: '词库', icon: Notebook },
-  { path: '/courses/index', label: '课程', icon: Reading },
-  { path: '/setting/index', label: '设置', icon: Setting },
+  { path: '/', label: '主页', icon: HomeFilled ,isAuth:false},
+  { path: '/chat/index', label: '聊天', icon: MagicStick ,isAuth:true},
+  { path: '/word-book/index', label: '词库', icon: Notebook ,isAuth:false},
+  { path: '/courses/index', label: '课程', icon: Reading ,isAuth:false},
+  { path: '/setting/index', label: '设置', icon: Setting ,isAuth:true},
 ]
+const gotoPath = async (path: string) => {
+    const isAuth = navItems.find(route => route.path === path)?.isAuth ?? false
+    if(isAuth){
+        await login()
+        if(userStore.isLoggedIn){
+            router.push(path)
+        }
+
+    }else{
+        router.push(path)
+    }
+}
 
 const handleLogout = async () => {
     await ElMessageBox.confirm('确定要退出登录吗？', '提示', {

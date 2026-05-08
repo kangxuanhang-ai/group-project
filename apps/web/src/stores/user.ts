@@ -1,6 +1,6 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
-import type { Token, ResultUser } from '@en/common/user'
+import type { Token, ResultUser, UserUpdate } from '@en/common/user'
 import { refreshApi } from '@/apis/refresh'
 
 function isTokenExpired(token: string): boolean {
@@ -29,6 +29,36 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed(() => !!token.value?.accessToken)
   const getAccessToken = computed(() => token.value?.accessToken)
   const getRefreshToken = computed(() => token.value?.refreshToken)
+
+  const setUser = (params: ResultUser) => {
+    user.value = params
+  }
+  const getUser = computed(() => user.value)
+
+  //更新用户信息
+  const updateUser = (params:UserUpdate)=>{
+    user.value!.name=params.name
+    user.value!.email=params.email
+    user.value!.address=params.address
+    user.value!.avatar=params.avatar
+    user.value!.bio=params.bio
+    user.value!.isTimingTask=params.isTimingTask
+    user.value!.timingTaskTime=params.timingTaskTime
+
+  }
+
+  //读取用户信息
+  const getUpdateUserInfo = computed<UserUpdate>(()=>{
+    return {
+      name:user.value!.name,
+      email:user.value!.email,
+      address:user.value!.address,
+      avatar:user.value!.avatar,
+      bio:user.value!.bio,
+      isTimingTask:user.value!.isTimingTask,
+      timingTaskTime:user.value!.timingTaskTime,
+    }
+  })
 
   function setLogin(data: { token: Token } & ResultUser) {
     token.value = data.token
@@ -78,7 +108,14 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { token, user, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout, checkAuth }
+  // token 被持久化插件恢复时自动检查是否过期
+  watch(token, (newToken) => {
+    if (newToken) {
+      checkAuth()
+    }
+  }, { immediate: true })
+
+  return { token, user, setUser, getUser, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout, checkAuth, updateUser, getUpdateUserInfo }
 }, {
   persist: true,
 })

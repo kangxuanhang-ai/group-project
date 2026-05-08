@@ -1,6 +1,7 @@
 import { IS_SHOW_LOGIN } from "@/components/Login/type";
 import { inject, ref } from "vue";
 import { useUserStore } from "@/stores/user";
+import router from "@/router";
 
 let loginResolve: (() => void) | null = null
 
@@ -26,7 +27,8 @@ export const useLogin = () => {
   }
 
   const logout = () => {
-    isShowLogin.value = false
+    useUserStore().logout()
+    router.replace('/')
   };
 
   return {

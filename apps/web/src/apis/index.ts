@@ -3,6 +3,8 @@ import { useUserStore } from '@/stores/user'
 import router from '@/router'
 import type { Token } from '@en/common/user'
 import { refreshApi } from './refresh'
+import { ElMessage } from 'element-plus'
+export const uploadUrl = import.meta.env.DEV ? 'http://127.0.0.1:9000' : 'http://线上地址'
 
 export const timeout = 50000
 
@@ -29,6 +31,11 @@ let requestQueue: QueueItem[] = []
 let isRefreshing = false
 
 async function handleRefreshError(error: any, api: typeof serverApi) {
+    if(error.code==='ERR_NETWORK'){
+        ElMessage.error('网络错误')
+        return Promise.reject(error)
+    }
+
     if (error.response?.status !== 401) {
         return Promise.reject(error)
     }
