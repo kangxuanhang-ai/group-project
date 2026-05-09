@@ -10,6 +10,7 @@ import { WordBookModule } from './word-book/word-book.module';
 import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
 import { MulterModule } from '@nestjs/platform-express'; // 新增
+import { TrackerModule } from './tracker/tracker.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,7 +21,7 @@ import { MulterModule } from '@nestjs/platform-express'; // 新增
       dest: './uploads', // 临时文件存储目录，MinIO 上传后可以删除
     }),
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 60 }]),
-    UserModule, SharedModule, WordBookModule, AuthModule, CourseModule],
+    UserModule, SharedModule, WordBookModule, AuthModule, CourseModule, TrackerModule],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

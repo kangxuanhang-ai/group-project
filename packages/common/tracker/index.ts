@@ -55,8 +55,8 @@ export interface PerformanceDto {
     cls: number // CLS
 }
 
-const initTracker = {options:TrackerConfig} =>{
-
+const initTracker = (options:TrackerConfig) =>{
+    console.log('Tracker initialized with:', options);
 }
 
 initTracker({
