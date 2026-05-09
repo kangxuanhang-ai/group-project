@@ -26,7 +26,7 @@ model User {
   id              String           @id @default(cuid()) // 用户ID
   name            String // 用户名
   email           String?          @unique // 邮箱
-  phone           String           @unique // 手机号
+   phone           String?          @unique // 手机号
   address         String? // 地址
   password        String // 密码
   avatar          String? // 头像
@@ -149,6 +149,21 @@ model SmsCode {
 
   @@index([phone])
   @@index([phone, code])
+}
+
+//邮箱验证码表
+model EmailCode {
+  id        String   @id @default(cuid()) // 记录ID
+  email     String // 邮箱
+  code      String // 验证码
+  expiresAt DateTime // 过期时间
+  used      Boolean  @default(false) // 是否已使用
+  attempts  Int      @default(0) // 校验失败次数
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @updatedAt // 更新时间
+
+  @@index([email])
+  @@index([email, code])
 }
 
 //访客表(UV) 下面五个表都是新增的

@@ -391,6 +391,7 @@ export const ModelName = {
   CourseRecord: 'CourseRecord',
   Course: 'Course',
   SmsCode: 'SmsCode',
+  EmailCode: 'EmailCode',
   Visitor: 'Visitor',
   PageView: 'PageView',
   TrackEvent: 'TrackEvent',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "wordBookRecord" | "wordBook" | "paymentRecord" | "courseRecord" | "course" | "smsCode" | "visitor" | "pageView" | "trackEvent" | "performanceEntry" | "errorEntry"
+    modelProps: "user" | "wordBookRecord" | "wordBook" | "paymentRecord" | "courseRecord" | "course" | "smsCode" | "emailCode" | "visitor" | "pageView" | "trackEvent" | "performanceEntry" | "errorEntry"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -930,6 +931,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SmsCodeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SmsCodeCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailCode: {
+      payload: Prisma.$EmailCodePayload<ExtArgs>
+      fields: Prisma.EmailCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        findFirst: {
+          args: Prisma.EmailCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        findMany: {
+          args: Prisma.EmailCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>[]
+        }
+        create: {
+          args: Prisma.EmailCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        createMany: {
+          args: Prisma.EmailCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>[]
+        }
+        delete: {
+          args: Prisma.EmailCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        update: {
+          args: Prisma.EmailCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCodePayload>
+        }
+        aggregate: {
+          args: Prisma.EmailCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailCode>
+        }
+        groupBy: {
+          args: Prisma.EmailCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailCodeCountAggregateOutputType> | number
         }
       }
     }
@@ -1463,6 +1538,20 @@ export const SmsCodeScalarFieldEnum = {
 export type SmsCodeScalarFieldEnum = (typeof SmsCodeScalarFieldEnum)[keyof typeof SmsCodeScalarFieldEnum]
 
 
+export const EmailCodeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailCodeScalarFieldEnum = (typeof EmailCodeScalarFieldEnum)[keyof typeof EmailCodeScalarFieldEnum]
+
+
 export const VisitorScalarFieldEnum = {
   id: 'id',
   anonymousId: 'anonymousId',
@@ -1800,6 +1889,7 @@ export type GlobalOmitConfig = {
   courseRecord?: Prisma.CourseRecordOmit
   course?: Prisma.CourseOmit
   smsCode?: Prisma.SmsCodeOmit
+  emailCode?: Prisma.EmailCodeOmit
   visitor?: Prisma.VisitorOmit
   pageView?: Prisma.PageViewOmit
   trackEvent?: Prisma.TrackEventOmit

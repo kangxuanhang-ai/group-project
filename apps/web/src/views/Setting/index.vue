@@ -49,6 +49,29 @@
                         </div>
                     </div>
                 </el-card>
+
+                <el-card shadow="never" class="mt-4">
+                    <template #header>
+                        <div class="font-bold">绑定邮箱</div>
+                    </template>
+
+                    <div class="space-y-3">
+                        <div class="text-sm text-slate-500">绑定邮箱后可使用邮箱登录</div>
+                        <div class="flex w-full gap-3">
+                            <el-input v-model="bindEmailForm.email" placeholder="请输入邮箱" size="default" class="flex-1" />
+                            <el-button size="default" :disabled="emailCodeSending || emailCountdown > 0" @click="handleSendBindEmailCode"
+                                :class="emailCountdown > 0 ? '' : ''">
+                                <template v-if="emailCountdown > 0">{{ emailCountdown }}s</template>
+                                <template v-else-if="emailCodeSending">发送中...</template>
+                                <template v-else>获取验证码</template>
+                            </el-button>
+                        </div>
+                        <div class="flex w-full gap-3">
+                            <el-input v-model="bindEmailForm.code" placeholder="请输入验证码" size="default" maxlength="6" class="flex-1" />
+                            <el-button type="primary" size="default" :loading="emailBinding" @click="handleBindEmail">绑定</el-button>
+                        </div>
+                    </div>
+                </el-card>
             </el-col>
 
             <el-col :span="16">
@@ -115,6 +138,7 @@ import type {FormItemRule,FormRules} from 'element-plus'
 import avatar from '@/assets/images//avatar/1.jpg'
 import { useUserStore } from '@/stores/user'
 import { uploadAvatarApi } from '@/apis/user'
+import { sendEmailCodeApi, bindEmailApi } from '@/apis/user'
 import type { UploadFile,FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { updateUser } from '@/apis/user'
@@ -127,6 +151,12 @@ const formRef = useTemplateRef<FormInstance>('formRef')
 
 const userStore = useUserStore()
 const previewUrl = ref<string>('')
+
+const bindEmailForm = ref({ email: '', code: '' })
+const emailCodeSending = ref(false)
+const emailBinding = ref(false)
+const emailCountdown = ref(0)
+let emailCountdownTimer: ReturnType<typeof setInterval> | null = null
 
 const form = ref<UserUpdate>({
     name: '',
@@ -179,6 +209,54 @@ const onSave= async()=>{
         ElMessage.success('更新成功')
     }else{
         ElMessage.error(res.message)
+    }
+}
+const handleSendBindEmailCode = async () => {
+    if (!bindEmailForm.value.email) {
+        ElMessage.warning('请输入邮箱')
+        return
+    }
+    emailCodeSending.value = true
+    try {
+        const res = await sendEmailCodeApi(bindEmailForm.value.email)
+        if (res.success) {
+            ElMessage.success('验证码已发送')
+            emailCountdown.value = 60
+            emailCountdownTimer = setInterval(() => {
+                emailCountdown.value--
+                if (emailCountdown.value <= 0) {
+                    if (emailCountdownTimer) clearInterval(emailCountdownTimer)
+                    emailCountdownTimer = null
+                }
+            }, 1000)
+        } else {
+            ElMessage.error(res.message || '发送失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '发送失败')
+    } finally {
+        emailCodeSending.value = false
+    }
+}
+const handleBindEmail = async () => {
+    if (!bindEmailForm.value.email || !bindEmailForm.value.code) {
+        ElMessage.warning('请填写邮箱和验证码')
+        return
+    }
+    emailBinding.value = true
+    try {
+        const res = await bindEmailApi({ email: bindEmailForm.value.email, code: bindEmailForm.value.code })
+        if (res.success) {
+            ElMessage.success('邮箱绑定成功')
+            bindEmailForm.value = { email: '', code: '' }
+            init()
+        } else {
+            ElMessage.error(res.message || '绑定失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '绑定失败')
+    } finally {
+        emailBinding.value = false
     }
 }
 const logoutHandle = ()=>{

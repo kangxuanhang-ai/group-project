@@ -14,6 +14,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { BindEmailDto } from './dto/bind-email.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type {UserUpdate} from '@en/common/user'
 import { AuthGuard } from '@nestjs/passport';
@@ -61,5 +62,13 @@ export class UserController {
   updateUser(@Body() createUserDto: UserUpdate , @Req() req: Request) {
     const user = req.user;
     return this.userService.updateUser(createUserDto,user);
+  }
+
+  //绑定邮箱
+  @UseGuards(AuthGuard('jwt'))
+  @Post('bind-email')
+  bindEmail(@Body() dto: BindEmailDto, @Req() req: Request) {
+    const user = req.user;
+    return this.userService.bindEmail(dto, user);
   }
 }

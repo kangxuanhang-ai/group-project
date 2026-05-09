@@ -4,10 +4,16 @@ import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '@libs/shared';
 import { ResponseService } from '@libs/shared';
 import { SmsService } from './sms.service';
+import { EmailService } from './email.service';
 import { RegisterDto } from './dto/register.dto';
+import { RegisterByEmailDto } from './dto/register-by-email.dto';
 import { LoginDto } from './dto/login.dto';
 import type { TokenPayload, RefreshTokenPayload } from '@en/common/user';
 import type { Token } from '@en/common/user';
+
+function isEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
 
 @Injectable()
 export class AuthService {
@@ -16,10 +22,15 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly response: ResponseService,
         private readonly smsService: SmsService,
+        private readonly emailService: EmailService,
     ) { }
 
     async sendCode(phone: string) {
         return this.smsService.sendCode(phone);
+    }
+
+    async sendEmailCode(email: string) {
+        return this.emailService.sendCode(email);
     }
 
     async register(dto: RegisterDto) {
@@ -52,12 +63,40 @@ export class AuthService {
         return this.response.success({ ...result, token })
     }
 
+    async registerByEmail(dto: RegisterByEmailDto) {
+        const verifyResult = await this.emailService.verifyCode(dto.email, dto.code);
+        if (!verifyResult.success) {
+            return this.response.error(null, verifyResult.message, 400);
+        }
+
+        const existingEmail = await this.prisma.user.findUnique({ where: { email: dto.email } })
+        if (existingEmail) return this.response.error(null, '该邮箱已注册', 400)
+
+        const hashedPassword = await bcrypt.hash(dto.password, 10)
+
+        const user = await this.prisma.user.create({
+            data: {
+                name: dto.name,
+                email: dto.email,
+                password: hashedPassword,
+            },
+        })
+
+        const token = this.generateToken(user)
+        const { password, ...result } = user
+        return this.response.success({ ...result, token })
+    }
+
     async login(dto: LoginDto) {
-        const user = await this.prisma.user.findUnique({ where: { phone: dto.phone } })
-        if (!user) return this.response.error(null, '手机号或密码错误', 401)
+        const email = isEmail(dto.account)
+        const user = email
+            ? await this.prisma.user.findUnique({ where: { email: dto.account } })
+            : await this.prisma.user.findUnique({ where: { phone: dto.account } })
+
+        if (!user) return this.response.error(null, '账号或密码错误', 401)
 
         const isValid = await bcrypt.compare(dto.password, user.password)
-        if (!isValid) return this.response.error(null, '手机号或密码错误', 401)
+        if (!isValid) return this.response.error(null, '账号或密码错误', 401)
 
         await this.prisma.user.update({
             where: { id: user.id },

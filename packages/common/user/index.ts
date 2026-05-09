@@ -2,7 +2,7 @@ export interface User {
   id: string; // 用户ID
   name: string; // 用户名
   email?: string | null; // 邮箱
-  phone: string; // 手机号
+  phone?: string | null; // 手机号
   address?: string | null; // 地址
   password: string; // 密码
   avatar?: string | null; // 头像
@@ -18,7 +18,9 @@ export interface User {
 
 export type UserRegister = Pick<User, "name" | "phone" | "email" | "password">;
 
-export type UserLogin = Pick<User, "phone" | "password">;
+export type UserRegisterByEmail = Pick<User, "name" | "email" | "password">;
+
+export type UserLogin = { account: string; password: string };
 
 export type ResultUser = Omit<User, "password">;
 
