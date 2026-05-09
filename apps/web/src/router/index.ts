@@ -4,7 +4,7 @@ import wordBook from './word-book/index'
 import course from './course/index'
 import chat from './chat/index'
 import setting from './setting/index'
-
+import pay from './pay/index'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +14,7 @@ const router = createRouter({
     ...course, //课程
     ...chat, //聊天
     ...setting, //设置
+    ...pay, //支付
   ]
 })
 
