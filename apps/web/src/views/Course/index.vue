@@ -89,7 +89,6 @@
                                 <span class="text-xs text-zinc-400 truncate">讲师 {{ item.teacher }}</span>
                             </div>
                             <button type="button"
-                                @click="goLearn(item)"
                                 class="mt-4 w-full py-2.5 rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors cursor-pointer">
                                 去学习
                             </button>
@@ -130,14 +129,19 @@ const fetchAllCourses = async () => {
     if (res.success) {
         list.value = res.data.map(item => ({
             ...item,
-            url: item.url || `/images/course/${item.value}.png`
+            url: `/images/course/${item.value}.png`  // 始终使用 public 下的静态图片，不受 DB url 字段影响
         }))
     }
 }
 
 const fetchMyCourses = async () => {
     const res = await getMyCourses()
-    if (res.success) myCourses.value = res.data
+    if (res.success) {
+        myCourses.value = res.data.map(item => ({
+            ...item,
+            url: `/images/course/${item.value}.png`  // 和精选课程一样使用 public 下的静态图片
+        }))
+    }
 }
 
 const imageSrc = (url: string) => { return url }
