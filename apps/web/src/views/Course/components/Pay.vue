@@ -16,9 +16,8 @@
                     <!-- 课程信息（有 course 时展示） -->
                     <div v-if="course" class="p-6 space-y-4">
                         <div class="flex gap-4 rounded-xl bg-zinc-50/80 p-4">
-                            <div class="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-zinc-200">
-                                <img src="../../../assets/vvvvvv.png"
-                                    class="w-full h-full object-cover" />
+                            <div class="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-lg">
+                                {{ course.name?.charAt(0) || '课' }}
                             </div>
                             <div class="min-w-0 flex-1">
                                 <h3 class="text-sm font-medium text-zinc-900 line-clamp-2">{{ course.name }}</h3>

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import type { RefreshTokenPayload } from '@en/common/user';
@@ -14,6 +14,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: RefreshTokenPayload) {
+        if (payload.tokenType !== 'access') {
+            throw new UnauthorizedException('无效的访问令牌');
+        }
         return { userId: payload.userId, name: payload.name, email: payload.email };
     }
 }

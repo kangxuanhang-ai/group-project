@@ -73,6 +73,7 @@ export const useUserStore = defineStore('user', () => {
   function logout() {
     token.value = null
     user.value = null
+    localStorage.removeItem('user')
   }
 
   async function checkAuth() {

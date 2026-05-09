@@ -103,7 +103,7 @@ model PaymentRecord {
   sendPayTime   DateTime? // 支付时间
   createdAt     DateTime       @default(now()) // 创建时间
   updatedAt     DateTime       @updatedAt // 更新时间
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Restrict)
   courseRecords CourseRecord[]
   @@index([tradeNo])
 }
@@ -117,7 +117,7 @@ model CourseRecord {
   updatedAt       DateTime       @updatedAt // 更新时间
   paymentRecordId String? // 支付记录ID
   paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id], onDelete: Cascade)
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Restrict)
   course          Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
@@ -184,7 +184,10 @@ model PageView {
 
   @@index([visitorId, createdAt])
   @@index([path, createdAt])
+  @@index([createdAt])
 }
+
+//用户行为表
 
 //用户行为表
 model TrackEvent {
@@ -199,6 +202,7 @@ model TrackEvent {
 
   @@index([visitorId, createdAt])
   @@index([event, createdAt])
+  @@index([createdAt])
 }
 
 //性能指标
@@ -220,6 +224,7 @@ model PerformanceEntry {
   @@index([inp, createdAt])
   @@index([cls, createdAt])
   @@index([fp, fcp, lcp, inp, cls, createdAt])
+  @@index([createdAt])
 }
 
 model ErrorEntry {
@@ -235,4 +240,5 @@ model ErrorEntry {
 
   @@index([visitorId, createdAt])
   @@index([error, createdAt])
+  @@index([createdAt])
 }

@@ -5,7 +5,7 @@ import * as OpenApi from '@alicloud/openapi-client';
 
 const SMS_COOLDOWN_MS = 60_000;
 const SMS_DAILY_LIMIT = 30;
-const SMS_MAX_ATTEMPTS = 5;
+const SMS_MAX_ATTEMPTS = 10;
 const SMS_CODE_EXPIRY_MINUTES = 5;
 
 function todayStart(): Date {
