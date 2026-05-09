@@ -71,4 +71,18 @@ export class UserController {
     const user = req.user;
     return this.userService.bindEmail(dto, user);
   }
+
+  //打卡
+  @UseGuards(AuthGuard('jwt'))
+  @Post('check-in')
+  checkIn(@Req() req: Request) {
+    return this.userService.checkIn(req.user);
+  }
+
+  //今日打卡状态
+  @UseGuards(AuthGuard('jwt'))
+  @Get('check-in/today')
+  todayCheckIn(@Req() req: Request) {
+    return this.userService.todayCheckIn(req.user);
+  }
 }

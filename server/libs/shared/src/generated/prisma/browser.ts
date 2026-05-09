@@ -48,6 +48,11 @@ export type CourseRecord = Prisma.CourseRecordModel
  */
 export type Course = Prisma.CourseModel
 /**
+ * Model CheckIn
+ * 
+ */
+export type CheckIn = Prisma.CheckInModel
+/**
  * Model SmsCode
  * 
  */

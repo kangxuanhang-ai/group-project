@@ -32,3 +32,11 @@ export const sendEmailCodeApi = (email: string): Promise<Response<null>> => {
 export const bindEmailApi = (data: { email: string; code: string }): Promise<Response<UserUpdate>> => {
     return serverApi.post('/user/bind-email', data) as Promise<Response<UserUpdate>>
 }
+
+export const checkInApi = (): Promise<Response<{ dayNumber: number; checked: boolean }>> => {
+    return serverApi.post('/user/check-in') as Promise<Response<{ dayNumber: number; checked: boolean }>>
+}
+
+export const todayCheckInApi = (): Promise<Response<{ checked: boolean }>> => {
+    return serverApi.get('/user/check-in/today') as Promise<Response<{ checked: boolean }>>
+}

@@ -25,7 +25,13 @@
             <div class="bg-white hover:bg-blue-50 border border-blue-200 text-gray-800 rounded-[10px] p-4 cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md h-[220px]"
                 v-for="item in list" :key="item.id">
                 <div class="">
-                    <div class="text-sm font-semibold text-blue-600 mb-1">{{ item.word }}</div>
+                    <div class="text-sm font-semibold text-blue-600 mb-1 flex items-center justify-between">
+                        <span>{{ item.word }}</span>
+                        <el-checkbox v-if="userStore.isLoggedIn" v-model="item._mastered" size="small"
+                            @change="(val: boolean) => handleToggleMaster(item.id, val)"
+                            class="master-checkbox">
+                        </el-checkbox>
+                    </div>
                     <div class="text-sm text-gray-500 mb-1 flex items-center gap-2">{{ item.phonetic }} <el-icon
                             size="18" color="#2563EB" @click="playAudio(item.word)">
                             <VideoPlay />
@@ -53,13 +59,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getWordBookList } from '@/apis/word-book'
+import { getWordBookList, getMasteredWords, toggleMasterWord } from '@/apis/word-book'
 import type { WordQuery, WordList } from '@en/common/word'
 import { Reading, VideoPlay } from '@element-plus/icons-vue'
 import { useAudio } from '@/hooks/useAudio'
+import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
 const { playAudio } = useAudio({})
+const userStore = useUserStore()
 const total = ref<WordList['total']>(0)
-const list = ref<WordList['list']>([])
+const list = ref<any[]>([])
+const masteredIds = ref<Set<string>>(new Set())
 const query = ref<WordQuery>({
     page: 1,
     pageSize: 12,
@@ -74,20 +84,52 @@ const query = ref<WordQuery>({
     ky: false,
 })
 const searchWord = () => {
-    query.value.page = 1 //重置一下页数
-    getList() //重新获取列表
+    query.value.page = 1
+    getList()
 }
 
 const getList = async () => {
     const res = await getWordBookList(query.value)
     if (res.success) {
         total.value = res.data.total
-        list.value = res.data.list
+        list.value = (res.data.list || []).map(item => ({
+            ...item,
+            _mastered: masteredIds.value.has(item.id),
+        }))
     }
 }
 
+const fetchMastered = async () => {
+    if (!userStore.isLoggedIn) return
+    try {
+        const res = await getMasteredWords()
+        if (res.success && res.data) {
+            masteredIds.value = new Set(res.data)
+            list.value = list.value.map(item => ({
+                ...item,
+                _mastered: masteredIds.value.has(item.id),
+            }))
+        }
+    } catch {}
+}
+
+const handleToggleMaster = async (wordId: string, checked: boolean) => {
+    try {
+        const res = await toggleMasterWord(wordId)
+        if (res.success) {
+            masteredIds.value[checked ? 'add' : 'delete'](wordId)
+            userStore.updateWordNumber(res.data.wordNumber)
+        }
+    } catch (err: any) {
+        ElMessage.error('操作失败')
+        list.value = list.value.map(item => ({
+            ...item,
+            _mastered: masteredIds.value.has(item.id),
+        }))
+    }
+}
 
 onMounted(() => {
-    getList()
+    getList().then(() => fetchMastered())
 })
 </script>

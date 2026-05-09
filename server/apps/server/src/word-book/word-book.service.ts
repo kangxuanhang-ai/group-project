@@ -33,4 +33,35 @@ export class WordBookService {
     ])
     return this.responseService.success({ total, list });
   }
+
+  async getMastered(userId: string) {
+    const records = await this.prismaService.wordBookRecord.findMany({
+      where: { userId, isMaster: true },
+      select: { wordId: true },
+    })
+    return this.responseService.success(records.map(r => r.wordId))
+  }
+
+  async toggleMaster(wordId: string, userId: string) {
+    const existing = await this.prismaService.wordBookRecord.findUnique({
+      where: { userId_wordId: { userId, wordId } },
+    })
+    const newIsMaster = existing ? !existing.isMaster : true
+
+    await this.prismaService.wordBookRecord.upsert({
+      where: { userId_wordId: { userId, wordId } },
+      create: { userId, wordId, isMaster: newIsMaster },
+      update: { isMaster: newIsMaster },
+    })
+
+    const count = await this.prismaService.wordBookRecord.count({
+      where: { userId, isMaster: true },
+    })
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { wordNumber: count },
+    })
+
+    return this.responseService.success({ isMaster: newIsMaster, wordNumber: count })
+  }
 }

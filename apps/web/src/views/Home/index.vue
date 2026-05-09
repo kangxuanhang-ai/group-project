@@ -18,6 +18,35 @@
             </div>
         </div>
 
+        <!-- 📅 打卡区域 -->
+        <div v-if="userStore.isLoggedIn" class="mt-8 rounded-[20px] p-8 text-center border border-gray-100 shadow-sm">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <span class="text-2xl">🔥</span>
+                <span class="text-lg font-bold text-gray-800">连续学习</span>
+            </div>
+            <div class="flex items-center justify-center gap-8 mb-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-indigo-600">{{ userStore.user?.wordNumber ?? 0 }}</div>
+                    <div class="text-sm text-gray-500 mt-1">已掌握单词</div>
+                </div>
+                <div class="w-px h-10 bg-gray-200" />
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-amber-500">{{ userStore.user?.dayNumber ?? 0 }}</div>
+                    <div class="text-sm text-gray-500 mt-1">已打卡天数</div>
+                </div>
+            </div>
+            <button v-if="!checkedToday" @click="handleCheckIn" :disabled="checking"
+                class="px-8 py-2.5 bg-linear-to-r from-indigo-500 to-purple-600 text-white rounded-full text-sm font-medium hover:from-indigo-600 hover:to-purple-700 transition-all disabled:opacity-50">
+                {{ checking ? '打卡中...' : '✅ 今日打卡' }}
+            </button>
+            <div v-else class="inline-flex items-center gap-2 px-8 py-2.5 bg-green-50 text-green-600 rounded-full text-sm font-medium">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                今日已打卡
+            </div>
+        </div>
+
         <!-- 📖 描述区域 -->
         <div class="rounded-[20px] p-10 text-center">
             <div class="text-2xl text-why font-bold text-gray-800">为什么选择我们?</div>
@@ -88,8 +117,43 @@
 import Hologram from './components/Hologram.vue'
 import {gsap} from 'gsap'
 import {ScrollTrigger} from 'gsap/ScrollTrigger'
-import {onMounted,reactive} from 'vue'
+import {onMounted,reactive,ref} from 'vue'
+import { useUserStore } from '@/stores/user'
+import { checkInApi, todayCheckInApi } from '@/apis/user'
+import { ElMessage } from 'element-plus'
 gsap.registerPlugin(ScrollTrigger)
+const userStore = useUserStore()
+const checkedToday = ref(false)
+const checking = ref(false)
+
+const fetchTodayCheckIn = async () => {
+    if (!userStore.isLoggedIn) return
+    try {
+        const res = await todayCheckInApi()
+        if (res.success) {
+            checkedToday.value = res.data.checked
+        }
+    } catch {}
+}
+
+const handleCheckIn = async () => {
+    checking.value = true
+    try {
+        const res = await checkInApi()
+        if (res.success) {
+            checkedToday.value = true
+            userStore.updateDayNumber(res.data.dayNumber)
+            ElMessage.success('打卡成功')
+        } else {
+            ElMessage.error(res.message || '打卡失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '打卡失败')
+    } finally {
+        checking.value = false
+    }
+}
+
 const stats = reactive([
     { value: 0, suffix: '+', label: '累计学员', target: 1000000 },
     { value: 0, suffix: '+', label: '精品课程', target: 500 },
@@ -197,5 +261,6 @@ const initProject = () => {
 
 onMounted(() => { 
     initProject()
+    fetchTodayCheckIn()
 })
 </script>

@@ -23,8 +23,15 @@ export type Word = {
     updatedAt: string; // 更新时间, ISO 日期字符串
 };
 
+export type WordWithMaster = Word & { isMaster?: boolean };
+
 export type WordList = {
     list: Word[];
+    total: number;
+}
+
+export type WordListWithMaster = {
+    list: WordWithMaster[];
     total: number;
 }
 

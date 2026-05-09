@@ -101,4 +101,39 @@ export class UserService {
     });
     return this.response.success(updated);
   }
+
+  async checkIn(user: Request['user']) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const existing = await this.prisma.checkIn.findUnique({
+      where: { userId_date: { userId: user.userId, date: today } },
+    });
+    if (existing) {
+      return this.response.error(null, '今日已打卡', 400);
+    }
+
+    await this.prisma.checkIn.create({
+      data: { userId: user.userId, date: today },
+    });
+
+    const count = await this.prisma.checkIn.count({ where: { userId: user.userId } });
+    await this.prisma.user.update({
+      where: { id: user.userId },
+      data: { dayNumber: count },
+    });
+
+    return this.response.success({ dayNumber: count, checked: true });
+  }
+
+  async todayCheckIn(user: Request['user']) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const existing = await this.prisma.checkIn.findUnique({
+      where: { userId_date: { userId: user.userId, date: today } },
+    });
+
+    return this.response.success({ checked: !!existing });
+  }
 }

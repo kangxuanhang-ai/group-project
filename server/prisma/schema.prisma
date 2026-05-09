@@ -42,6 +42,7 @@ model User {
   paymentRecords  PaymentRecord[]
   courseRecords   CourseRecord[]
   visitors        Visitor[] //User别忘记关联
+  checkIns        CheckIn[]
 }
 
 //记录已操作的单词
@@ -134,6 +135,19 @@ model Course {
   createdAt     DateTime       @default(now()) // 创建时间
   updatedAt     DateTime       @updatedAt // 更新时间
   courseRecords CourseRecord[]
+}
+
+//打卡表
+model CheckIn {
+  id        String   @id @default(cuid()) // 打卡ID
+  userId    String // 用户ID
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime // 打卡日期（只取年月日）
+  createdAt DateTime @default(now()) // 创建时间
+  updatedAt DateTime @updatedAt // 更新时间
+
+  @@unique([userId, date])
+  @@index([userId])
 }
 
 //短信验证码表

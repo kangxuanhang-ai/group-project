@@ -57,6 +57,7 @@ export const ModelName = {
   PaymentRecord: 'PaymentRecord',
   CourseRecord: 'CourseRecord',
   Course: 'Course',
+  CheckIn: 'CheckIn',
   SmsCode: 'SmsCode',
   EmailCode: 'EmailCode',
   Visitor: 'Visitor',
@@ -187,6 +188,17 @@ export const CourseScalarFieldEnum = {
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
+
+
+export const CheckInScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CheckInScalarFieldEnum = (typeof CheckInScalarFieldEnum)[keyof typeof CheckInScalarFieldEnum]
 
 
 export const SmsCodeScalarFieldEnum = {

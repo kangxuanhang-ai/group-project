@@ -44,7 +44,14 @@ export const useUserStore = defineStore('user', () => {
     user.value!.bio=params.bio
     user.value!.isTimingTask=params.isTimingTask
     user.value!.timingTaskTime=params.timingTaskTime
+  }
 
+  const updateWordNumber = (n: number) => {
+    if (user.value) user.value.wordNumber = n
+  }
+
+  const updateDayNumber = (n: number) => {
+    if (user.value) user.value.dayNumber = n
   }
 
   //读取用户信息
@@ -116,7 +123,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }, { immediate: true })
 
-  return { token, user, setUser, getUser, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout, checkAuth, updateUser, getUpdateUserInfo }
+  return { token, user, setUser, getUser, isLoggedIn, getAccessToken, getRefreshToken, setLogin, updateToken, logout, checkAuth, updateUser, updateWordNumber, updateDayNumber, getUpdateUserInfo }
 }, {
   persist: true,
 })

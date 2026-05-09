@@ -49,7 +49,6 @@ export class TrackerService {
         return this.responseService.success(true)
     }
     async pv(body: PvDto) {
-        console.log(body)
         await this.prismaService.pageView.create({
             data: {
                 visitorId: body.visitorId,
