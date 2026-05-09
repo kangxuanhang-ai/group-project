@@ -58,6 +58,7 @@ export const ModelName = {
   CourseRecord: 'CourseRecord',
   Course: 'Course',
   SmsCode: 'SmsCode',
+  EmailCode: 'EmailCode',
   Visitor: 'Visitor',
   PageView: 'PageView',
   TrackEvent: 'TrackEvent',
@@ -200,6 +201,20 @@ export const SmsCodeScalarFieldEnum = {
 } as const
 
 export type SmsCodeScalarFieldEnum = (typeof SmsCodeScalarFieldEnum)[keyof typeof SmsCodeScalarFieldEnum]
+
+
+export const EmailCodeScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailCodeScalarFieldEnum = (typeof EmailCodeScalarFieldEnum)[keyof typeof EmailCodeScalarFieldEnum]
 
 
 export const VisitorScalarFieldEnum = {

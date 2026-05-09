@@ -5,8 +5,8 @@
     </div>
 
     <el-form ref="formRef" :model="form" :rules="rules" class="space-y-6" @submit.prevent="handleLogin">
-        <el-form-item prop="phone">
-            <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12" :prefix-icon="User"
+        <el-form-item prop="account">
+            <el-input v-model="form.account" placeholder="手机号 / 邮箱" size="large" class="h-12" :prefix-icon="User"
                 @focus="emit('update-status', { isTyping: true })"
                 @blur="emit('update-status', { isTyping: false })" />
         </el-form-item>
@@ -60,7 +60,7 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>()
 const form = ref({
-    phone: '',
+    account: '',
     password: '',
 })
 const loading = ref(false)
@@ -69,9 +69,8 @@ const passwordVisible = ref(false)
 const passwordFieldType = computed(() => passwordVisible.value ? 'text' : 'password')
 
 const rules = {
-    phone: [
-        { required: true, message: '请输入手机号', trigger: 'blur' },
-        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' },
+    account: [
+        { required: true, message: '请输入手机号或邮箱', trigger: 'blur' },
     ],
     password: [
         { required: true, message: '请输入密码', trigger: 'blur' },
@@ -94,7 +93,7 @@ const handleLogin = async () => {
     loading.value = true
     try {
         const res = await loginApi({
-            phone: form.value.phone,
+            account: form.value.account,
             password: form.value.password,
         })
         if (res.success) {

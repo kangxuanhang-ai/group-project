@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { BindEmailDto } from './dto/bind-email.dto';
 import { PrismaService } from '@libs/shared';
 import { ResponseService } from '@libs/shared';
 import { MinioService } from '@libs/shared/minio/minio.service';
 import { ConfigService } from '@nestjs/config';
+import { EmailService } from '../auth/email.service';
 import type {UserUpdate} from '@en/common/user'
 import type {Request} from 'express';
 import {updateUserSelect} from './user.select';
@@ -15,6 +17,7 @@ export class UserService {
     private readonly response: ResponseService,
     private readonly minioService: MinioService,
     private readonly configService: ConfigService,
+    private readonly emailService: EmailService,
   ) {}
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
@@ -80,5 +83,22 @@ export class UserService {
       select: updateUserSelect,
     });
     return this.response.success(updateUser);
+  }
+
+  async bindEmail(dto: BindEmailDto, user: Request['user']) {
+    const verifyResult = await this.emailService.verifyCode(dto.email, dto.code);
+    if (!verifyResult.success) {
+      return this.response.error(null, verifyResult.message, 400);
+    }
+
+    const existingEmail = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (existingEmail) return this.response.error(null, '该邮箱已被其他账号绑定', 400);
+
+    const updated = await this.prisma.user.update({
+      where: { id: user.userId },
+      data: { email: dto.email },
+      select: updateUserSelect,
+    });
+    return this.response.success(updated);
   }
 }

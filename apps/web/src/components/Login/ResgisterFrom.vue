@@ -1,8 +1,31 @@
 <template>
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">欢迎注册</h1>
-        <p class="text-gray-500 text-sm">请填写以下信息以完成注册</p>
+        <div class="relative flex w-full h-12 bg-gray-50 rounded-xl p-1">
+            <div class="absolute top-1 h-10 rounded-lg bg-white shadow-sm transition-all duration-300 ease-in-out"
+                :style="{ width: '50%', left: registerMode === 'phone' ? '0%' : '50%' }"></div>
+            <button type="button"
+                class="relative z-10 flex-1 flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-300"
+                :class="registerMode === 'phone' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'"
+                @click="switchTo('phone')">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+                手机号注册
+            </button>
+            <button type="button"
+                class="relative z-10 flex-1 flex items-center justify-center gap-2 text-sm font-medium transition-colors duration-300"
+                :class="registerMode === 'email' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'"
+                @click="switchTo('email')">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                邮箱注册
+            </button>
+        </div>
     </div>
+
     <el-form ref="formRef" :model="form" :rules="rules" label-width="80" label-position="top" class="space-y-6"
         @submit.prevent="handleRegister">
         <el-form-item prop="name">
@@ -10,20 +33,53 @@
                 @focus="emit('update-status', { isTyping: true })"
                 @blur="emit('update-status', { isTyping: false })" />
         </el-form-item>
-        <el-form-item prop="phone">
-            <div class="flex w-full gap-3">
-                <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12 flex-1"
-                    :prefix-icon="Iphone" @focus="emit('update-status', { isTyping: true })"
-                    @blur="emit('update-status', { isTyping: false })" />
-                <el-button size="large" :disabled="codeSending || countdown > 0" class="h-12 px-5 shrink-0"
-                    @click="handleSendCode"
-                    :class="countdown > 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'">
-                    <template v-if="countdown > 0">{{ countdown }}s</template>
-                    <template v-else-if="codeSending">发送中...</template>
-                    <template v-else>获取验证码</template>
-                </el-button>
-            </div>
-        </el-form-item>
+
+        <transition name="mode-fade" mode="out-in">
+            <!-- 手机号注册 -->
+            <el-form-item key="phone" v-if="registerMode === 'phone'" prop="phone">
+                <div class="flex w-full gap-3">
+                    <el-input v-model="form.phone" placeholder="请输入手机号" size="large" class="h-12 flex-1"
+                        :prefix-icon="Iphone" @focus="emit('update-status', { isTyping: true })"
+                        @blur="emit('update-status', { isTyping: false })" />
+                    <el-button size="large" :disabled="codeSending || countdown > 0" class="h-12 px-5 shrink-0"
+                        @click="handleSendCode"
+                        :class="countdown > 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'">
+                        <template v-if="countdown > 0">{{ countdown }}s</template>
+                        <template v-else-if="codeSending">发送中...</template>
+                        <template v-else>
+                            <svg class="w-4 h-4 inline-block mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                <line x1="12" y1="18" x2="12.01" y2="18"/>
+                            </svg>
+                            获取验证码
+                        </template>
+                    </el-button>
+                </div>
+            </el-form-item>
+
+            <!-- 邮箱注册 -->
+            <el-form-item key="email" v-else prop="email">
+                <div class="flex w-full gap-3">
+                    <el-input v-model="form.email" placeholder="请输入邮箱" size="large" class="h-12 flex-1"
+                        :prefix-icon="Message" @focus="emit('update-status', { isTyping: true })"
+                        @blur="emit('update-status', { isTyping: false })" />
+                    <el-button size="large" :disabled="codeSending || countdown > 0" class="h-12 px-5 shrink-0"
+                        @click="handleSendCode"
+                        :class="countdown > 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'">
+                        <template v-if="countdown > 0">{{ countdown }}s</template>
+                        <template v-else-if="codeSending">发送中...</template>
+                        <template v-else>
+                            <svg class="w-4 h-4 inline-block mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            获取验证码
+                        </template>
+                    </el-button>
+                </div>
+            </el-form-item>
+        </transition>
+
         <el-form-item prop="code">
             <el-input v-model="form.code" placeholder="请输入6位验证码" size="large" maxlength="6" class="h-12"
                 :prefix-icon="Lock" @focus="emit('update-status', { isTyping: true })"
@@ -58,11 +114,26 @@
     </el-form>
 </template>
 
+<style scoped>
+.mode-fade-enter-active,
+.mode-fade-leave-active {
+    transition: all 0.25s ease;
+}
+.mode-fade-enter-from {
+    opacity: 0;
+    transform: translateY(-8px);
+}
+.mode-fade-leave-to {
+    opacity: 0;
+    transform: translateY(8px);
+}
+</style>
+
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { User, Lock, Iphone } from '@element-plus/icons-vue'
+import { ref, computed, nextTick } from 'vue'
+import { User, Lock, Iphone, Message } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { registerApi, sendCodeApi } from '@/apis/user'
+import { registerApi, registerByEmailApi, sendCodeApi, sendEmailCodeApi } from '@/apis/user'
 import type { FormInstance } from 'element-plus'
 
 const emit = defineEmits<{
@@ -71,10 +142,13 @@ const emit = defineEmits<{
     (e: 'update-status', status: { isTyping?: boolean; passwordLength?: number; showPassword?: boolean }): void
 }>()
 
+const registerMode = ref<'phone' | 'email'>('phone')
+
 const formRef = ref<FormInstance>()
 const form = ref({
     name: '',
     phone: '',
+    email: '',
     code: '',
     password: '',
 })
@@ -86,7 +160,7 @@ let countdownTimer: ReturnType<typeof setInterval> | null = null
 
 const passwordFieldType = computed(() => passwordVisible.value ? 'text' : 'password')
 
-const rules = {
+const phoneRules = {
     name: [
         { required: true, message: '请输入用户名', trigger: 'blur' },
         { min: 2, max: 10, message: '用户名长度为2-10位', trigger: 'blur' },
@@ -103,6 +177,43 @@ const rules = {
         { required: true, message: '请输入密码', trigger: 'blur' },
         { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
     ],
+}
+
+const emailRules = {
+    name: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { min: 2, max: 10, message: '用户名长度为2-10位', trigger: 'blur' },
+    ],
+    email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+        { pattern: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/, message: '请输入正确的邮箱', trigger: 'blur' },
+    ],
+    code: [
+        { required: true, message: '请输入验证码', trigger: 'blur' },
+        { pattern: /^\d{6}$/, message: '验证码为6位数字', trigger: 'blur' },
+    ],
+    password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' },
+    ],
+}
+
+const rules = computed(() => registerMode.value === 'phone' ? phoneRules : emailRules)
+
+const switchTo = (mode: 'phone' | 'email') => {
+    if (registerMode.value === mode) return
+    registerMode.value = mode
+    form.value.phone = ''
+    form.value.email = ''
+    form.value.code = ''
+    if (countdownTimer) {
+        clearInterval(countdownTimer)
+        countdownTimer = null
+    }
+    countdown.value = 0
+    nextTick(() => {
+        formRef.value?.clearValidate()
+    })
 }
 
 const togglePasswordVisible = () => {
@@ -127,12 +238,15 @@ function startCountdown(seconds: number) {
 
 const handleSendCode = async () => {
     if (!formRef.value) return
-    const valid = await formRef.value.validateField('phone').catch(() => false)
+    const field = registerMode.value === 'phone' ? 'phone' : 'email'
+    const valid = await formRef.value.validateField(field).catch(() => false)
     if (!valid) return
 
     codeSending.value = true
     try {
-        const res = await sendCodeApi(form.value.phone)
+        const res = registerMode.value === 'phone'
+            ? await sendCodeApi(form.value.phone)
+            : await sendEmailCodeApi(form.value.email)
         if (res.success) {
             ElMessage.success('验证码已发送')
             startCountdown(60)
@@ -152,12 +266,19 @@ const handleRegister = async () => {
 
     loading.value = true
     try {
-        const res = await registerApi({
-            name: form.value.name,
-            phone: form.value.phone,
-            password: form.value.password,
-            code: form.value.code,
-        })
+        const res = registerMode.value === 'phone'
+            ? await registerApi({
+                name: form.value.name,
+                phone: form.value.phone,
+                password: form.value.password,
+                code: form.value.code,
+            })
+            : await registerByEmailApi({
+                name: form.value.name,
+                email: form.value.email,
+                password: form.value.password,
+                code: form.value.code,
+            })
         if (res.success) {
             ElMessage.success('注册成功，请登录')
             emit('registered')

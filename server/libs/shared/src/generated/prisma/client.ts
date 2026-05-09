@@ -75,6 +75,11 @@ export type Course = Prisma.CourseModel
  */
 export type SmsCode = Prisma.SmsCodeModel
 /**
+ * Model EmailCode
+ * 
+ */
+export type EmailCode = Prisma.EmailCodeModel
+/**
  * Model Visitor
  * 
  */
