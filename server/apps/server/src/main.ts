@@ -19,7 +19,7 @@ import { InterceptorInterceptor } from '@libs/shared/interceptor/interceptor';
 import { InterceptorExceptionFilter } from '@libs/shared/interceptor/exceptionFilter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug', 'verbose'] });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new InterceptorInterceptor());
   app.useGlobalFilters(new InterceptorExceptionFilter());
@@ -27,5 +27,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   await app.listen(Config.ports.server);
+  console.log(`Server running on http://localhost:${Config.ports.server}`);
 }
-bootstrap().then().catch();
+bootstrap().then(() => {
+  console.log('Application started successfully');
+}).catch((error) => {
+  console.error('Application failed to start:', error);
+  process.exit(1);
+});

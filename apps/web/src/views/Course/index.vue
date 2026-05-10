@@ -89,6 +89,7 @@
                                 <span class="text-xs text-zinc-400 truncate">讲师 {{ item.teacher }}</span>
                             </div>
                             <button type="button"
+                                @click="goLearn(item)"
                                 class="mt-4 w-full py-2.5 rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors cursor-pointer">
                                 去学习
                             </button>
@@ -105,7 +106,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getCourseList, getMyCourses } from '@/apis/course'
 import { queryPayStatus, confirmPay } from '@/apis/pay'
@@ -115,6 +116,7 @@ import { useLogin } from '@/hooks/useLogin'
 import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
+const router = useRouter()
 const activeTab = ref<'all' | 'my'>('all')
 const list = ref<Course[]>([])
 const myCourses = ref<Course[]>([])
@@ -171,9 +173,7 @@ const onPaid = () => {
 }
 
 const goLearn = (course: Course) => {
-    if (course.url) {
-        window.open(course.url, '_blank')
-    }
+    router.push('/word-learn/index')
 }
 
 onMounted(() => {

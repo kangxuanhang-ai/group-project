@@ -15,12 +15,16 @@ export class PayService implements OnModuleInit {
     public alipaySdk: AlipaySdk;
 
     onModuleInit(): void {
-        this.alipaySdk = new AlipaySdk({
-            appId: this.configService.get<string>('ALIPAY_APP_ID')!,
-            privateKey: this.configService.get<string>('ALIPAY_PRIVATE_KEY')!,
-            alipayPublicKey: this.configService.get<string>('ALIPAY_PUBLIC_KEY')!,
-            gateway: this.configService.get<string>('ALIPAY_GATEWAY')!,
-        });
+        try {
+            this.alipaySdk = new AlipaySdk({
+                appId: this.configService.get<string>('ALIPAY_APP_ID') || '',
+                privateKey: this.configService.get<string>('ALIPAY_PRIVATE_KEY') || '',
+                alipayPublicKey: this.configService.get<string>('ALIPAY_PUBLIC_KEY') || '',
+                gateway: this.configService.get<string>('ALIPAY_GATEWAY') || '',
+            });
+        } catch (error) {
+            console.warn('Alipay SDK initialization failed:', error);
+        }
     }
 
     getAlipaySdk(): AlipaySdk {

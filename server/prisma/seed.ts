@@ -6,6 +6,29 @@ import fs from 'node:fs'
 
 dotenv.config({ path: new URL('../.env', import.meta.url).pathname })
 
+const wordData = [
+    { word: 'dream', definition: 'n. a series of mental images and emotions occurring during sleep; imaginative thoughts indulged in while awake; a cherished aspiration, ambition, or ideal', translation: 'n. 梦，梦想，理想', gk: true },
+    { word: 'shoulder', definition: 'n. the part of the body between the neck and upper arm; a cut of meat from this part; a burden or responsibility', translation: 'n. 肩，肩膀；负担，责任', gk: true },
+    { word: 'basket', definition: 'n. a container typically made of woven strips of wood or plastic; the amount held by a basket', translation: 'n. 篮子，筐', gk: true },
+    { word: 'kitchen', definition: 'n. a room or area where food is prepared and cooked', translation: 'n. 厨房', gk: true },
+    { word: 'garden', definition: 'n. a plot of ground where plants, flowers, or vegetables are cultivated; a yard or park', translation: 'n. 花园，菜园，公园', gk: true },
+    { word: 'school', definition: 'n. an institution for educating children; a place of learning; a group of people sharing similar principles', translation: 'n. 学校，学院；学派', gk: true },
+    { word: 'library', definition: 'n. a building or room containing collections of books, periodicals, and sometimes films and recorded music for use or borrowing by the public', translation: 'n. 图书馆，藏书室', gk: true },
+    { word: 'bedroom', definition: 'n. a room for sleeping in', translation: 'n. 卧室', gk: true },
+    { word: 'window', definition: 'n. an opening in the wall or roof of a building or vehicle that is fitted with glass or other transparent material in a frame to admit light or air and allow people to see out', translation: 'n. 窗户，窗口', gk: true },
+    { word: 'drawer', definition: 'n. a sliding boxlike container in a piece of furniture; a person who draws', translation: 'n. 抽屉；画家', gk: true },
+    { word: 'table', definition: 'n. a piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working at', translation: 'n. 桌子，表格', gk: true },
+    { word: 'chair', definition: 'n. a seat with a back and four legs, for one person', translation: 'n. 椅子', gk: true },
+    { word: 'book', definition: 'n. a written or printed work consisting of pages glued or sewn together along one side and bound in covers', translation: 'n. 书，书籍', gk: true },
+    { word: 'door', definition: 'n. a hinged or sliding barrier closing an opening in a wall, fence, or vehicle', translation: 'n. 门', gk: true },
+    { word: 'house', definition: 'n. a building for human habitation, especially one that is lived in by a family or small group of people', translation: 'n. 房子，住宅', gk: true },
+    { word: 'tree', definition: 'n. a woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground', translation: 'n. 树，树木', gk: true },
+    { word: 'flower', definition: 'n. the seed-bearing part of a plant, consisting of reproductive organs (stamens and carpels) surrounded by brightly colored petals and sepals', translation: 'n. 花，花卉', gk: true },
+    { word: 'water', definition: 'n. a colorless, transparent, odorless liquid that forms the seas, lakes, rivers, and rain and is the basis of the fluids of living organisms', translation: 'n. 水', gk: true },
+    { word: 'food', definition: 'n. any nutritious substance that people or animals eat or drink, or that plants absorb, in order to maintain life and growth', translation: 'n. 食物，食品', gk: true },
+    { word: 'friend', definition: 'n. a person whom one knows and with whom one has a bond of mutual affection, typically exclusive of sexual or family relations', translation: 'n. 朋友', gk: true },
+]
+
 const data = [
     {
         name: '高考单词',
@@ -165,6 +188,18 @@ async function main() {
             }
         })
     }
+
+    for (const wordItem of wordData) {
+        await prisma.wordBook.create({
+            data: {
+                word: wordItem.word,
+                definition: wordItem.definition,
+                translation: wordItem.translation,
+                gk: wordItem.gk,
+            }
+        })
+    }
+    console.log('单词数据插入成功')
 
     await prisma.$disconnect()
 }
