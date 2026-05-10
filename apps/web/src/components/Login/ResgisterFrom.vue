@@ -27,7 +27,7 @@
     </div>
 
     <el-form ref="formRef" :model="form" :rules="rules" label-width="80" label-position="top" class="space-y-6"
-        @submit.prevent="handleRegister">
+        :validate-on-rule-change="false" @submit.prevent="handleRegister">
         <el-form-item prop="name">
             <el-input v-model="form.name" placeholder="请输入用户名" size="large" class="h-12" :prefix-icon="User"
                 @focus="emit('update-status', { isTyping: true })"
