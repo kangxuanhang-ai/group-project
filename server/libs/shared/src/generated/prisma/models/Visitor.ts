@@ -206,11 +206,11 @@ export type VisitorWhereInput = {
   browser?: Prisma.StringNullableFilter<"Visitor"> | string | null
   os?: Prisma.StringNullableFilter<"Visitor"> | string | null
   device?: Prisma.StringNullableFilter<"Visitor"> | string | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  pageViews?: Prisma.PageViewListRelationFilter
-  trackEvents?: Prisma.TrackEventListRelationFilter
-  performanceEntries?: Prisma.PerformanceEntryListRelationFilter
   errorEntries?: Prisma.ErrorEntryListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
+  performanceEntries?: Prisma.PerformanceEntryListRelationFilter
+  trackEvents?: Prisma.TrackEventListRelationFilter
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type VisitorOrderByWithRelationInput = {
@@ -222,11 +222,11 @@ export type VisitorOrderByWithRelationInput = {
   browser?: Prisma.SortOrderInput | Prisma.SortOrder
   os?: Prisma.SortOrderInput | Prisma.SortOrder
   device?: Prisma.SortOrderInput | Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
-  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
-  trackEvents?: Prisma.TrackEventOrderByRelationAggregateInput
-  performanceEntries?: Prisma.PerformanceEntryOrderByRelationAggregateInput
   errorEntries?: Prisma.ErrorEntryOrderByRelationAggregateInput
+  pageViews?: Prisma.PageViewOrderByRelationAggregateInput
+  performanceEntries?: Prisma.PerformanceEntryOrderByRelationAggregateInput
+  trackEvents?: Prisma.TrackEventOrderByRelationAggregateInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type VisitorWhereUniqueInput = Prisma.AtLeast<{
@@ -241,11 +241,11 @@ export type VisitorWhereUniqueInput = Prisma.AtLeast<{
   browser?: Prisma.StringNullableFilter<"Visitor"> | string | null
   os?: Prisma.StringNullableFilter<"Visitor"> | string | null
   device?: Prisma.StringNullableFilter<"Visitor"> | string | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  pageViews?: Prisma.PageViewListRelationFilter
-  trackEvents?: Prisma.TrackEventListRelationFilter
-  performanceEntries?: Prisma.PerformanceEntryListRelationFilter
   errorEntries?: Prisma.ErrorEntryListRelationFilter
+  pageViews?: Prisma.PageViewListRelationFilter
+  performanceEntries?: Prisma.PerformanceEntryListRelationFilter
+  trackEvents?: Prisma.TrackEventListRelationFilter
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "anonymousId">
 
 export type VisitorOrderByWithAggregationInput = {
@@ -284,11 +284,11 @@ export type VisitorCreateInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
-  pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
+  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
 }
 
 export type VisitorUncheckedCreateInput = {
@@ -300,10 +300,10 @@ export type VisitorUncheckedCreateInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorUpdateInput = {
@@ -314,11 +314,11 @@ export type VisitorUpdateInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
-  pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
+  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
 }
 
 export type VisitorUncheckedUpdateInput = {
@@ -330,10 +330,10 @@ export type VisitorUncheckedUpdateInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorCreateManyInput = {
@@ -522,10 +522,10 @@ export type VisitorCreateWithoutUserInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
+  pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorUncheckedCreateWithoutUserInput = {
@@ -536,10 +536,10 @@ export type VisitorUncheckedCreateWithoutUserInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
+  pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorCreateOrConnectWithoutUserInput = {
@@ -590,10 +590,10 @@ export type VisitorCreateWithoutPageViewsInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
-  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
+  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
 }
 
 export type VisitorUncheckedCreateWithoutPageViewsInput = {
@@ -605,9 +605,9 @@ export type VisitorUncheckedCreateWithoutPageViewsInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
   errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorCreateOrConnectWithoutPageViewsInput = {
@@ -634,10 +634,10 @@ export type VisitorUpdateWithoutPageViewsInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
-  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
+  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
 }
 
 export type VisitorUncheckedUpdateWithoutPageViewsInput = {
@@ -649,9 +649,9 @@ export type VisitorUncheckedUpdateWithoutPageViewsInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorCreateWithoutTrackEventsInput = {
@@ -662,10 +662,10 @@ export type VisitorCreateWithoutTrackEventsInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
+  errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
   performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
-  errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
+  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
 }
 
 export type VisitorUncheckedCreateWithoutTrackEventsInput = {
@@ -677,9 +677,9 @@ export type VisitorUncheckedCreateWithoutTrackEventsInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
+  errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
   performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
-  errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorCreateOrConnectWithoutTrackEventsInput = {
@@ -706,10 +706,10 @@ export type VisitorUpdateWithoutTrackEventsInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
+  errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
   performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
-  errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
+  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
 }
 
 export type VisitorUncheckedUpdateWithoutTrackEventsInput = {
@@ -721,9 +721,9 @@ export type VisitorUncheckedUpdateWithoutTrackEventsInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
   performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
-  errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorCreateWithoutPerformanceEntriesInput = {
@@ -734,10 +734,10 @@ export type VisitorCreateWithoutPerformanceEntriesInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
+  errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
   trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
-  errorEntries?: Prisma.ErrorEntryCreateNestedManyWithoutVisitorInput
+  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
 }
 
 export type VisitorUncheckedCreateWithoutPerformanceEntriesInput = {
@@ -749,9 +749,9 @@ export type VisitorUncheckedCreateWithoutPerformanceEntriesInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
+  errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
   trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
-  errorEntries?: Prisma.ErrorEntryUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorCreateOrConnectWithoutPerformanceEntriesInput = {
@@ -778,10 +778,10 @@ export type VisitorUpdateWithoutPerformanceEntriesInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
+  errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
   trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
-  errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
+  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
 }
 
 export type VisitorUncheckedUpdateWithoutPerformanceEntriesInput = {
@@ -793,9 +793,9 @@ export type VisitorUncheckedUpdateWithoutPerformanceEntriesInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
   trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
-  errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorCreateWithoutErrorEntriesInput = {
@@ -806,10 +806,10 @@ export type VisitorCreateWithoutErrorEntriesInput = {
   browser?: string | null
   os?: string | null
   device?: string | null
-  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
   pageViews?: Prisma.PageViewCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
   performanceEntries?: Prisma.PerformanceEntryCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventCreateNestedManyWithoutVisitorInput
+  user?: Prisma.UserCreateNestedOneWithoutVisitorsInput
 }
 
 export type VisitorUncheckedCreateWithoutErrorEntriesInput = {
@@ -822,8 +822,8 @@ export type VisitorUncheckedCreateWithoutErrorEntriesInput = {
   os?: string | null
   device?: string | null
   pageViews?: Prisma.PageViewUncheckedCreateNestedManyWithoutVisitorInput
-  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
   performanceEntries?: Prisma.PerformanceEntryUncheckedCreateNestedManyWithoutVisitorInput
+  trackEvents?: Prisma.TrackEventUncheckedCreateNestedManyWithoutVisitorInput
 }
 
 export type VisitorCreateOrConnectWithoutErrorEntriesInput = {
@@ -850,10 +850,10 @@ export type VisitorUpdateWithoutErrorEntriesInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
   pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
   performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
+  user?: Prisma.UserUpdateOneWithoutVisitorsNestedInput
 }
 
 export type VisitorUncheckedUpdateWithoutErrorEntriesInput = {
@@ -866,8 +866,8 @@ export type VisitorUncheckedUpdateWithoutErrorEntriesInput = {
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
   performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorCreateManyUserInput = {
@@ -888,10 +888,10 @@ export type VisitorUpdateWithoutUserInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUpdateManyWithoutVisitorNestedInput
+  pageViews?: Prisma.PageViewUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorUncheckedUpdateWithoutUserInput = {
@@ -902,10 +902,10 @@ export type VisitorUncheckedUpdateWithoutUserInput = {
   browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   os?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
-  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
-  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
   errorEntries?: Prisma.ErrorEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  pageViews?: Prisma.PageViewUncheckedUpdateManyWithoutVisitorNestedInput
+  performanceEntries?: Prisma.PerformanceEntryUncheckedUpdateManyWithoutVisitorNestedInput
+  trackEvents?: Prisma.TrackEventUncheckedUpdateManyWithoutVisitorNestedInput
 }
 
 export type VisitorUncheckedUpdateManyWithoutUserInput = {
@@ -924,17 +924,17 @@ export type VisitorUncheckedUpdateManyWithoutUserInput = {
  */
 
 export type VisitorCountOutputType = {
-  pageViews: number
-  trackEvents: number
-  performanceEntries: number
   errorEntries: number
+  pageViews: number
+  performanceEntries: number
+  trackEvents: number
 }
 
 export type VisitorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pageViews?: boolean | VisitorCountOutputTypeCountPageViewsArgs
-  trackEvents?: boolean | VisitorCountOutputTypeCountTrackEventsArgs
-  performanceEntries?: boolean | VisitorCountOutputTypeCountPerformanceEntriesArgs
   errorEntries?: boolean | VisitorCountOutputTypeCountErrorEntriesArgs
+  pageViews?: boolean | VisitorCountOutputTypeCountPageViewsArgs
+  performanceEntries?: boolean | VisitorCountOutputTypeCountPerformanceEntriesArgs
+  trackEvents?: boolean | VisitorCountOutputTypeCountTrackEventsArgs
 }
 
 /**
@@ -950,15 +950,15 @@ export type VisitorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * VisitorCountOutputType without action
  */
-export type VisitorCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PageViewWhereInput
+export type VisitorCountOutputTypeCountErrorEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ErrorEntryWhereInput
 }
 
 /**
  * VisitorCountOutputType without action
  */
-export type VisitorCountOutputTypeCountTrackEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TrackEventWhereInput
+export type VisitorCountOutputTypeCountPageViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PageViewWhereInput
 }
 
 /**
@@ -971,8 +971,8 @@ export type VisitorCountOutputTypeCountPerformanceEntriesArgs<ExtArgs extends ru
 /**
  * VisitorCountOutputType without action
  */
-export type VisitorCountOutputTypeCountErrorEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ErrorEntryWhereInput
+export type VisitorCountOutputTypeCountTrackEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TrackEventWhereInput
 }
 
 
@@ -985,11 +985,11 @@ export type VisitorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   browser?: boolean
   os?: boolean
   device?: boolean
-  user?: boolean | Prisma.Visitor$userArgs<ExtArgs>
-  pageViews?: boolean | Prisma.Visitor$pageViewsArgs<ExtArgs>
-  trackEvents?: boolean | Prisma.Visitor$trackEventsArgs<ExtArgs>
-  performanceEntries?: boolean | Prisma.Visitor$performanceEntriesArgs<ExtArgs>
   errorEntries?: boolean | Prisma.Visitor$errorEntriesArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Visitor$pageViewsArgs<ExtArgs>
+  performanceEntries?: boolean | Prisma.Visitor$performanceEntriesArgs<ExtArgs>
+  trackEvents?: boolean | Prisma.Visitor$trackEventsArgs<ExtArgs>
+  user?: boolean | Prisma.Visitor$userArgs<ExtArgs>
   _count?: boolean | Prisma.VisitorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["visitor"]>
 
@@ -1030,11 +1030,11 @@ export type VisitorSelectScalar = {
 
 export type VisitorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "anonymousId" | "userId" | "createdAt" | "updatedAt" | "browser" | "os" | "device", ExtArgs["result"]["visitor"]>
 export type VisitorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.Visitor$userArgs<ExtArgs>
-  pageViews?: boolean | Prisma.Visitor$pageViewsArgs<ExtArgs>
-  trackEvents?: boolean | Prisma.Visitor$trackEventsArgs<ExtArgs>
-  performanceEntries?: boolean | Prisma.Visitor$performanceEntriesArgs<ExtArgs>
   errorEntries?: boolean | Prisma.Visitor$errorEntriesArgs<ExtArgs>
+  pageViews?: boolean | Prisma.Visitor$pageViewsArgs<ExtArgs>
+  performanceEntries?: boolean | Prisma.Visitor$performanceEntriesArgs<ExtArgs>
+  trackEvents?: boolean | Prisma.Visitor$trackEventsArgs<ExtArgs>
+  user?: boolean | Prisma.Visitor$userArgs<ExtArgs>
   _count?: boolean | Prisma.VisitorCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VisitorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1047,11 +1047,11 @@ export type VisitorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $VisitorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Visitor"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
-    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
-    trackEvents: Prisma.$TrackEventPayload<ExtArgs>[]
-    performanceEntries: Prisma.$PerformanceEntryPayload<ExtArgs>[]
     errorEntries: Prisma.$ErrorEntryPayload<ExtArgs>[]
+    pageViews: Prisma.$PageViewPayload<ExtArgs>[]
+    performanceEntries: Prisma.$PerformanceEntryPayload<ExtArgs>[]
+    trackEvents: Prisma.$TrackEventPayload<ExtArgs>[]
+    user: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1456,11 +1456,11 @@ readonly fields: VisitorFieldRefs;
  */
 export interface Prisma__VisitorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.Visitor$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  pageViews<T extends Prisma.Visitor$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  trackEvents<T extends Prisma.Visitor$trackEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$trackEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrackEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  performanceEntries<T extends Prisma.Visitor$performanceEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$performanceEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PerformanceEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   errorEntries<T extends Prisma.Visitor$errorEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$errorEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ErrorEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pageViews<T extends Prisma.Visitor$pageViewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$pageViewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PageViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  performanceEntries<T extends Prisma.Visitor$performanceEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$performanceEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PerformanceEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  trackEvents<T extends Prisma.Visitor$trackEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$trackEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TrackEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.Visitor$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Visitor$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1899,22 +1899,27 @@ export type VisitorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Visitor.user
+ * Visitor.errorEntries
  */
-export type Visitor$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Visitor$errorEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the ErrorEntry
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.ErrorEntrySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the ErrorEntry
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.ErrorEntryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.ErrorEntryInclude<ExtArgs> | null
+  where?: Prisma.ErrorEntryWhereInput
+  orderBy?: Prisma.ErrorEntryOrderByWithRelationInput | Prisma.ErrorEntryOrderByWithRelationInput[]
+  cursor?: Prisma.ErrorEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ErrorEntryScalarFieldEnum | Prisma.ErrorEntryScalarFieldEnum[]
 }
 
 /**
@@ -1942,30 +1947,6 @@ export type Visitor$pageViewsArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Visitor.trackEvents
- */
-export type Visitor$trackEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the TrackEvent
-   */
-  select?: Prisma.TrackEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the TrackEvent
-   */
-  omit?: Prisma.TrackEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TrackEventInclude<ExtArgs> | null
-  where?: Prisma.TrackEventWhereInput
-  orderBy?: Prisma.TrackEventOrderByWithRelationInput | Prisma.TrackEventOrderByWithRelationInput[]
-  cursor?: Prisma.TrackEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TrackEventScalarFieldEnum | Prisma.TrackEventScalarFieldEnum[]
-}
-
-/**
  * Visitor.performanceEntries
  */
 export type Visitor$performanceEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1990,27 +1971,46 @@ export type Visitor$performanceEntriesArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * Visitor.errorEntries
+ * Visitor.trackEvents
  */
-export type Visitor$errorEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Visitor$trackEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ErrorEntry
+   * Select specific fields to fetch from the TrackEvent
    */
-  select?: Prisma.ErrorEntrySelect<ExtArgs> | null
+  select?: Prisma.TrackEventSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ErrorEntry
+   * Omit specific fields from the TrackEvent
    */
-  omit?: Prisma.ErrorEntryOmit<ExtArgs> | null
+  omit?: Prisma.TrackEventOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ErrorEntryInclude<ExtArgs> | null
-  where?: Prisma.ErrorEntryWhereInput
-  orderBy?: Prisma.ErrorEntryOrderByWithRelationInput | Prisma.ErrorEntryOrderByWithRelationInput[]
-  cursor?: Prisma.ErrorEntryWhereUniqueInput
+  include?: Prisma.TrackEventInclude<ExtArgs> | null
+  where?: Prisma.TrackEventWhereInput
+  orderBy?: Prisma.TrackEventOrderByWithRelationInput | Prisma.TrackEventOrderByWithRelationInput[]
+  cursor?: Prisma.TrackEventWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.ErrorEntryScalarFieldEnum | Prisma.ErrorEntryScalarFieldEnum[]
+  distinct?: Prisma.TrackEventScalarFieldEnum | Prisma.TrackEventScalarFieldEnum[]
+}
+
+/**
+ * Visitor.user
+ */
+export type Visitor$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Param, Query, UseGuards, Req } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Post, Param, Query, Body, Request, UseGuards } from '@nestjs/common';
 import { WordBookService } from './word-book.service';
 import type { WordQuery } from '@en/common/word';
-import type { Request } from 'express';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('word-book')
 export class WordBookController {
@@ -13,15 +12,27 @@ export class WordBookController {
     return this.wordBookService.findAll(query);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('mastered')
-  getMastered(@Req() req: Request) {
-    return this.wordBookService.getMastered(req.user.userId);
+  @UseGuards(AuthGuard)
+  getMastered(@Request() req) {
+    return this.wordBookService.getMastered(req.user.id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post('toggle-master/:wordId')
-  toggleMaster(@Param('wordId') wordId: string, @Req() req: Request) {
-    return this.wordBookService.toggleMaster(wordId, req.user.userId);
+  @UseGuards(AuthGuard)
+  toggleMaster(@Param('wordId') wordId: string, @Request() req) {
+    return this.wordBookService.toggleMaster(wordId, req.user.id);
+  }
+
+  @Get('learn')
+  @UseGuards(AuthGuard)
+  getWordsForLearning(@Request() req, @Query('limit') limit: number = 10) {
+    return this.wordBookService.getWordsForLearning(req.user.id, limit);
+  }
+
+  @Post('learn')
+  @UseGuards(AuthGuard)
+  markWordsAsLearned(@Request() req, @Body() body: { wordIds: string[] }) {
+    return this.wordBookService.markWordsAsLearned(req.user.id, body.wordIds);
   }
 }
