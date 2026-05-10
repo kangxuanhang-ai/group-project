@@ -1,175 +1,118 @@
-import * as Minio from 'minio'
-import dotenv from 'dotenv'
-import { PrismaClient } from '../libs/shared/src/generated/prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import fs from 'node:fs'
+import 'dotenv/config';
+import { PrismaClient } from '../libs/shared/src/generated/prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import * as fs from 'fs';
+import * as readline from 'readline';
+import * as iconv from 'iconv-lite';
 
-dotenv.config({ path: new URL('../.env', import.meta.url).pathname })
+const adapter = new PrismaPg({
+  connectionString:
+    process.env.DATABASE_URL ||
+    'postgres://postgres:123456@localhost:5432/english',
+});
+const prisma = new PrismaClient({ adapter });
 
-const data = [
-    {
-        name: '高考单词',
-        value: 'gk',
-        description: '覆盖高考大纲核心词汇，按考频与题型分类，助力考前冲刺提分。',
-        teacher: '小余同学',
-        url: '',
-        price: 100,
-    },
-    {
-        name: '中考单词',
-        value: 'zk',
-        description: '紧扣中考考纲，初中三年词汇一站式掌握，打好英语基础。',
-        teacher: '小满zs',
-        url: '',
-        price: 35,
-    },
-    {
-        name: 'GRE单词',
-        value: 'gre',
-        description: 'GRE 核心词汇与同反义词拓展，适合留学备考与高阶阅读。',
-        teacher: '初心哥',
-        url: '',
-        price: 80,
-    },
-    {
-        name: '托福词汇',
-        value: 'toefl',
-        description: '托福听说读写高频词 + 学术场景词汇，提升备考效率。',
-        teacher: '枫竹',
-        url: '',
-        price: 80000,
-    },
-    {
-        name: '雅思词汇',
-        value: 'ielts',
-        description: '雅思考试常考词汇与同义替换，兼顾移民与留学需求。',
-        teacher: 'ouka',
-        url: '',
-        price: 7000,
-    },
-    {
-        name: '大学英语六级单词',
-        value: 'cet6',
-        description: '六级大纲词汇与真题高频词，配合阅读与写作场景记忆。',
-        teacher: '章政',
-        url: '',
-        price: 5,
-    },
-    {
-        name: '大学英语四级单词',
-        value: 'cet4',
-        description: '四级核心词汇与考点搭配，适合在校生系统备考。',
-        teacher: '小余同学',
-        url: '',
-        price: 8,
-    },
-    {
-        name: '考研单词',
-        value: 'ky',
-        description: '考研英语一/二通用词汇，结合真题与长难句场景记忆。',
-        teacher: '远方',
-        url: '',
-        price: 9.99,
-    }
-]
-
-const minioConfig = {
-    endpoint: process.env.MINIO_ENDPOINT,
-    port: Number(process.env.MINIO_PORT),
-    useSSL: !!Number(process.env.MINIO_USE_SSL),
-    accessKey: process.env.MINIO_ACCESS_KEY,
-    secretKey: process.env.MINIO_SECRET_KEY,
-}
-
-const useMinio = Boolean(
-    minioConfig.endpoint &&
-    minioConfig.port &&
-    minioConfig.accessKey &&
-    minioConfig.secretKey
-)
-
-async function main() {
-    if (!process.env.DATABASE_URL) {
-        throw new Error('DATABASE_URL is not set in server/.env')
-    }
-
-    const prisma = new PrismaClient({
-        adapter: new PrismaPg({
-            connectionString: process.env.DATABASE_URL,
-        })
-    })
-    await prisma.$connect()
-
-    let minio: Minio.Client | null = null
-    const bucket = 'course'
-
-    if (useMinio) {
-        try {
-            minio = new Minio.Client({
-                endPoint: minioConfig.endpoint!,
-                port: minioConfig.port,
-                useSSL: minioConfig.useSSL,
-                accessKey: minioConfig.accessKey!,
-                secretKey: minioConfig.secretKey!,
-            })
-
-            const exists = await minio.bucketExists(bucket)
-            if (!exists) {
-                await minio.makeBucket(bucket)
-                await minio.setBucketPolicy(bucket, JSON.stringify({
-                    Version: '2012-10-17',
-                    Statement: [
-                        {
-                            Sid: 'CourseReadObjects',
-                            Effect: 'Allow',
-                            Principal: '*',
-                            Action: ['s3:GetObject'],
-                            Resource: ['arn:aws:s3:::course/*'],
-                        }
-                    ]
-                }))
-            }
-        } catch (error) {
-            console.warn('MinIO not available, skipping file upload. Error:', error)
-            minio = null
-        }
+// 解析 CSV 一行（处理引号内的逗号）
+function parseCSVLine(line: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
     } else {
-        console.warn('MinIO config incomplete or missing, skipping bucket creation and file upload.')
+      current += char;
     }
-
-    for (const item of data) {
-        let url = item.url
-
-        if (minio) {
-            const filePath = new URL(`./prisma/assets/${item.value}.png`, import.meta.url)
-            if (fs.existsSync(filePath)) {
-                const file = fs.readFileSync(filePath)
-                await minio.putObject(bucket, `${item.value}.png`, file, file.length, {
-                    'Content-Type': 'image/png',
-                })
-                url = `/course/${item.value}.png`
-                console.log(`${item.value}.png 上传成功`)
-            } else {
-                console.warn(`资源文件缺失: ${filePath}`)
-            }
-        }
-
-        await prisma.course.create({
-            data: {
-                name: item.name,
-                value: item.value,
-                description: item.description,
-                teacher: item.teacher,
-                url,
-                price: item.price,
-            }
-        })
-    }
-
-    await prisma.$disconnect()
+  }
+  result.push(current);
+  return result;
 }
 
-main().catch(error => {
-    console.error(error)
-    process.exit(1)
-})
+// 解析 tag 字段为布尔值
+function parseTagToBoolean(tagValue: string) {
+  const tags = tagValue
+    ? tagValue.split(' ').filter((t) => t.trim() !== '')
+    : [];
+  return {
+    zk: tags.includes('zk'),
+    gk: tags.includes('gk'),
+    cet4: tags.includes('cet4'),
+    cet6: tags.includes('cet6'),
+    ky: tags.includes('ky'),
+    toefl: tags.includes('toefl'),
+    ielts: tags.includes('ielts'),
+    gre: tags.includes('gre'),
+  };
+}
+
+async function readLargeCSV(filePath: string) {
+  let lineCount = 0;
+  let headers: string[] = [];
+  let batch: any[] = [];
+  const BATCH_SIZE = 2000;
+  let totalInserted = 0;
+
+  console.log('开始读取 CSV 文件并插入数据库...\n');
+
+  const fileStream = fs
+    .createReadStream(filePath)
+    .pipe(iconv.decodeStream('gbk'));
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  });
+
+  for await (const line of rl) {
+    lineCount++;
+    if (lineCount === 1) {
+      headers = line.split(',');
+      continue;
+    }
+
+    const values = parseCSVLine(line);
+    const rowData: Record<string, string> = {};
+    headers.forEach((header, index) => {
+      rowData[header] = values[index] || '';
+    });
+
+    const booleanFields = parseTagToBoolean(rowData.tag);
+
+    const wordData = {
+      word: rowData.word || '',
+      phonetic: rowData.phonetic || null,
+      definition: rowData.definition || null,
+      translation: rowData.translation || null,
+      pos: rowData.pos || null,
+      collins: rowData.collins || null,
+      oxford: rowData.oxford || null,
+      tag: rowData.tag || null,
+      bnc: rowData.bnc || null,
+      frq: rowData.frq || null,
+      exchange: rowData.exchange || null,
+      ...booleanFields,
+    };
+
+    batch.push(wordData);
+
+    if (batch.length >= BATCH_SIZE) {
+      await prisma.wordBook.createMany({ data: batch, skipDuplicates: true });
+      totalInserted += batch.length;
+      console.log(`已插入 ${totalInserted.toLocaleString()} 条数据...`);
+      batch = [];
+    }
+  }
+
+  if (batch.length > 0) {
+    await prisma.wordBook.createMany({ data: batch, skipDuplicates: true });
+    totalInserted += batch.length;
+  }
+
+  console.log(`插入完成！共插入 ${totalInserted.toLocaleString()} 条数据`);
+  await prisma.$disconnect();
+}
+
+readLargeCSV('prisma/ecdict.csv').catch(console.error);
