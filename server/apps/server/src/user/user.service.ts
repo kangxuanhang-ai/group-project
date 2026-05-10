@@ -50,8 +50,12 @@ export class UserService {
     const client = this.minioService.getClient();
     const bucket = this.minioService.getBucket(); 
 
+    if (!client) {
+      return this.response.error(null, 'MinIO client not available');
+    }
+
     const fileName = `${Date.now()}-${file.originalname}`;
-    await client.putObject(bucket, fileName, file.buffer,file.size,{
+    await client.putObject(bucket, fileName, file.buffer, file.size, {
       "Content-Type": file.mimetype,
     });
     //返回文件url
