@@ -28,7 +28,7 @@
                     <div class="text-sm font-semibold text-blue-600 mb-1 flex items-center justify-between">
                         <span>{{ item.word }}</span>
                         <el-checkbox v-if="userStore.isLoggedIn" v-model="item._mastered" size="small"
-                            @change="(val: boolean) => handleToggleMaster(item.id, val)"
+                            @change="(val: any) => handleToggleMaster(item.id, val)"
                             class="master-checkbox">
                         </el-checkbox>
                     </div>

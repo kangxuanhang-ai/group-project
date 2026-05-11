@@ -1,69 +1,61 @@
 import { ChatDeepSeek } from '@langchain/deepseek';
 import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres';
-// 修复：导入 ConfigService（NestJS 环境）
 import { ConfigService } from '@nestjs/config';
 
-// ===================== 配置常量 =====================
-const DATABASE_URL = 'postgresql://postgres:root@localhost:5432/langchain';
-const DEEPSEEK_API_KEY = 'sk-0f8bd14e14a24ab2affff4e2c641150e';
-const DEEPSEEK_API_MODEL = 'deepseek-chat';
-const DEEPSEEK_REASONER_API_MODEL = 'deepseek-reasoner';
-const BOCHA_SEARCH_URL = 'https://api.bochaai.com/v1/web-search';
-const BOCHA_API_KEY = 'sk-77d284097eff496db8c11ecc7ef22b90';
+function getEnv(configService: ConfigService | undefined, key: string, defaultValue: string): string {
+  return configService?.get<string>(key) || process.env[key] || defaultValue;
+}
 
-// ===================== 初始化 DeepSeek 普通模型 =====================
-export const createDeepSeek = () => {
+export const createDeepSeek = (configService?: ConfigService) => {
   return new ChatDeepSeek({
-    apiKey: DEEPSEEK_API_KEY,
-    model: DEEPSEEK_API_MODEL,
+    apiKey: getEnv(configService, 'DEEPSEEK_API_KEY', ''),
+    model: getEnv(configService, 'DEEPSEEK_API_MODEL', 'deepseek-chat'),
     temperature: 1.3,
     maxTokens: 4396,
     streaming: true,
   });
 };
 
-// ===================== 初始化 DeepSeek 深度思考模型 =====================
 export const createDeepSeekReasoner = (configService: ConfigService) => {
   return new ChatDeepSeek({
-    apiKey: configService.get<string>('DEEPSEEK_API_KEY') || DEEPSEEK_API_KEY,
-    model:
-      configService.get<string>('DEEPSEEK_REASONER_API_MODEL') ||
-      DEEPSEEK_REASONER_API_MODEL,
+    apiKey: getEnv(configService, 'DEEPSEEK_API_KEY', ''),
+    model: getEnv(configService, 'DEEPSEEK_REASONER_API_MODEL', 'deepseek-reasoner'),
     temperature: 1.3,
     maxTokens: 18000,
     streaming: true,
   });
 };
 
-// ===================== 初始化 PostgreSQL 对话记忆存储 =====================
-export const createCheckpoint = async () => {
-  const checkpointer = PostgresSaver.fromConnString(DATABASE_URL);
-  // 自动创建 langgraph 所需的 checkpoint 表
+export const createCheckpoint = async (configService?: ConfigService) => {
+  const databaseUrl = getEnv(configService, 'DATABASE_URL', '');
+  if (!databaseUrl) {
+    console.warn('[LLM] DATABASE_URL not configured, checkpointer disabled');
+    return null;
+  }
+  const checkpointer = PostgresSaver.fromConnString(databaseUrl);
   await checkpointer.setup();
   return checkpointer;
 };
 
-// ===================== 初始化博查搜索 API =====================
 export const createBochaSearch = async (
   configService: ConfigService,
   query: string,
   count: number = 10,
 ) => {
-  const result = await fetch(
-    configService.get<string>('BOCHA_SEARCH_URL') || BOCHA_SEARCH_URL,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${configService.get<string>('BOCHA_API_KEY') || BOCHA_API_KEY}`,
-      },
-      body: JSON.stringify({
-        query,
-        count,
-        summary: true,
-      }),
+  const apiKey = getEnv(configService, 'BOCHA_API_KEY', '');
+  const searchUrl = getEnv(configService, 'BOCHA_SEARCH_URL', 'https://api.bochaai.com/v1/web-search');
+  const result = await fetch(searchUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
     },
-  );
+    body: JSON.stringify({
+      query,
+      count,
+      summary: true,
+    }),
+  });
   const { data } = await result.json();
   const values = data.webPages.value;
   const prompt = values

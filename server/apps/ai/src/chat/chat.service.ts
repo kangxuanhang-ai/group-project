@@ -22,7 +22,7 @@ export class ChatService {
     if (!this.checkpointerInitPromise) {
       this.checkpointerInitPromise = (async () => {
         try {
-          this.checkpointer = await createCheckpoint();
+          this.checkpointer = await createCheckpoint(this.configService);
         } catch {
           console.warn('[ChatService] PostgreSQL not available, chat history will not be persisted');
           this.checkpointer = null;
@@ -44,7 +44,7 @@ export class ChatService {
       prompt += `请根据以下搜索结果回答问题: ${webSearchPrompt}(并且返回你参考的网站名称), 用户问题: ${createChatDto.content}`
     }
 
-    let model = createDeepSeek();
+    let model = createDeepSeek(this.configService);
     if (createChatDto.deepThink) {
       model = createDeepSeekReasoner(this.configService);
     }

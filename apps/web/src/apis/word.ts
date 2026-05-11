@@ -12,12 +12,12 @@ export const getWordsForLearning = async (limit: number = 10): Promise<Response<
   console.log('Calling GET /word-book/learn?limit=' + limit);
   const res = await serverApi.get(`/word-book/learn?limit=${limit}`);
   console.log('Response:', res);
-  return res;
+  return res as any;
 };
 
 export const markWordsAsLearned = async (wordIds: string[]): Promise<Response<string>> => {
   console.log('Calling POST /word-book/learn with wordIds:', wordIds);
   const res = await serverApi.post('/word-book/learn', { wordIds });
   console.log('Response:', res);
-  return res;
+  return res as any;
 };
