@@ -60,7 +60,7 @@ async function readLargeCSV(filePath: string) {
 
   const fileStream = fs
     .createReadStream(filePath)
-    .pipe(iconv.decodeStream('gbk'));
+    .pipe(iconv.decodeStream('utf-8'));
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
