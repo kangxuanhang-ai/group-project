@@ -4,7 +4,7 @@ import router from '@/router'
 import type { Token } from '@en/common/user'
 import { refreshApi } from './refresh'
 import { ElMessage } from 'element-plus'
-export const uploadUrl = import.meta.env.VITE_UPLOAD_URL || 'http://127.0.0.1:9000'
+export const uploadUrl = ''
 
 export const timeout = 10000
 

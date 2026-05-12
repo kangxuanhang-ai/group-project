@@ -6,7 +6,7 @@ export const useAvatar = () => {
     const userStore = useUserStore()
     const avatar = computed(() => {
         if(userStore.getUser?.avatar){
-            return uploadUrl + userStore.getUser.avatar
+            return '/files' + userStore.getUser.avatar
         }else{
             return defaultAvatar
         }
