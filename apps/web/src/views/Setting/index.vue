@@ -271,7 +271,7 @@ const logoutHandle = ()=>{
 const init=()=>{
     if(userStore.getUser){
         form.value = {...userStore.getUpdateUserInfo}
-        previewUrl.value = uploadUrl + form.value.avatar
+        previewUrl.value = '/files' + form.value.avatar
     }
 }
 
