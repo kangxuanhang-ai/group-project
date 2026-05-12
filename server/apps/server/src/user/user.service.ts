@@ -128,6 +128,7 @@ export class UserService {
 
   async deleteAccount(user: Request['user']) {
     const userId = user.userId;
+    await this.prisma.courseRecord.deleteMany({ where: { userId } });
     await this.prisma.paymentRecord.deleteMany({ where: { userId } });
     await this.prisma.user.delete({ where: { id: userId } });
     return this.response.success(null);
