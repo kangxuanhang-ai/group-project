@@ -72,7 +72,7 @@ export class PayService implements OnModuleInit {
         body: createPayDto.body,
         timeoutExpress: '30m',
       },
-      returnUrl: `http://localhost:8080/courses/index`,
+      returnUrl: `${this.configService.get<string>('CLIENT_URL') || 'http://localhost:8080'}/courses/index`,
       notifyUrl: this.configService.get<string>('ALIPAY_NOTIFY_URL'),
     };
 
