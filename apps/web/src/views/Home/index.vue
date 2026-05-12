@@ -139,7 +139,7 @@ const handleStartLearning = () => {
 }
 
 const handleViewCourse = () => {
-  router.push('/course/index')
+  router.push('/courses/index')
 }
 
 const fetchTodayCheckIn = async () => {
