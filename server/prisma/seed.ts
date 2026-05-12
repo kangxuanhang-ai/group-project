@@ -57,6 +57,8 @@ async function readLargeCSV(filePath: string) {
   let totalInserted = 0;
 
   console.log('开始读取 CSV 文件并插入数据库...\n');
+  console.log('清空旧数据...');
+  await prisma.wordBook.deleteMany();
 
   const fileStream = fs
     .createReadStream(filePath)
