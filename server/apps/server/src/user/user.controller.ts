@@ -15,6 +15,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { BindEmailDto } from './dto/bind-email.dto';
+import { BindPhoneDto } from './dto/bind-phone.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type {UserUpdate} from '@en/common/user'
 import { AuthGuard } from '@nestjs/passport';
@@ -70,6 +71,14 @@ export class UserController {
   bindEmail(@Body() dto: BindEmailDto, @Req() req: Request) {
     const user = req.user;
     return this.userService.bindEmail(dto, user);
+  }
+
+  //绑定手机号
+  @UseGuards(AuthGuard('jwt'))
+  @Post('bind-phone')
+  bindPhone(@Body() dto: BindPhoneDto, @Req() req: Request) {
+    const user = req.user;
+    return this.userService.bindPhone(dto, user);
   }
 
   //打卡

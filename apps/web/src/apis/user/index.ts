@@ -33,6 +33,10 @@ export const bindEmailApi = (data: { email: string; code: string }): Promise<Res
     return serverApi.post('/user/bind-email', data) as Promise<Response<UserUpdate>>
 }
 
+export const bindPhoneApi = (data: { phone: string; code: string }): Promise<Response<UserUpdate>> => {
+    return serverApi.post('/user/bind-phone', data) as Promise<Response<UserUpdate>>
+}
+
 export const checkInApi = (): Promise<Response<{ dayNumber: number; checked: boolean }>> => {
     return serverApi.post('/user/check-in') as Promise<Response<{ dayNumber: number; checked: boolean }>>
 }

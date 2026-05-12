@@ -50,7 +50,7 @@
                     </div>
                 </el-card>
 
-                <el-card shadow="never" class="mt-4">
+                <el-card shadow="never" class="mt-4" v-if="!hasEmail">
                     <template #header>
                         <div class="font-bold">绑定邮箱</div>
                     </template>
@@ -59,8 +59,7 @@
                         <div class="text-sm text-slate-500">绑定邮箱后可使用邮箱登录</div>
                         <div class="flex w-full gap-3">
                             <el-input v-model="bindEmailForm.email" placeholder="请输入邮箱" size="default" class="flex-1" />
-                            <el-button size="default" :disabled="emailCodeSending || emailCountdown > 0" @click="handleSendBindEmailCode"
-                                :class="emailCountdown > 0 ? '' : ''">
+                            <el-button size="default" :disabled="emailCodeSending || emailCountdown > 0" @click="handleSendBindEmailCode">
                                 <template v-if="emailCountdown > 0">{{ emailCountdown }}s</template>
                                 <template v-else-if="emailCodeSending">发送中...</template>
                                 <template v-else>获取验证码</template>
@@ -69,6 +68,28 @@
                         <div class="flex w-full gap-3">
                             <el-input v-model="bindEmailForm.code" placeholder="请输入验证码" size="default" maxlength="6" class="flex-1" />
                             <el-button type="primary" size="default" :loading="emailBinding" @click="handleBindEmail">绑定</el-button>
+                        </div>
+                    </div>
+                </el-card>
+
+                <el-card shadow="never" class="mt-4" v-if="!hasPhone">
+                    <template #header>
+                        <div class="font-bold">绑定手机号</div>
+                    </template>
+
+                    <div class="space-y-3">
+                        <div class="text-sm text-slate-500">绑定手机号后可使用手机号登录</div>
+                        <div class="flex w-full gap-3">
+                            <el-input v-model="bindPhoneForm.phone" placeholder="请输入手机号" size="default" class="flex-1" />
+                            <el-button size="default" :disabled="phoneCodeSending || phoneCountdown > 0" @click="handleSendBindPhoneCode">
+                                <template v-if="phoneCountdown > 0">{{ phoneCountdown }}s</template>
+                                <template v-else-if="phoneCodeSending">发送中...</template>
+                                <template v-else>获取验证码</template>
+                            </el-button>
+                        </div>
+                        <div class="flex w-full gap-3">
+                            <el-input v-model="bindPhoneForm.code" placeholder="请输入验证码" size="default" maxlength="6" class="flex-1" />
+                            <el-button type="primary" size="default" :loading="phoneBinding" @click="handleBindPhone">绑定</el-button>
                         </div>
                     </div>
                 </el-card>
@@ -132,13 +153,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref , onMounted , useTemplateRef} from 'vue'
+import { ref , computed , onMounted , useTemplateRef} from 'vue'
 import type {UserUpdate} from '@en/common/user'
 import type {FormItemRule,FormRules} from 'element-plus'
 import avatar from '@/assets/images//avatar/1.jpg'
 import { useUserStore } from '@/stores/user'
 import { uploadAvatarApi } from '@/apis/user'
-import { sendEmailCodeApi, bindEmailApi } from '@/apis/user'
+import { sendEmailCodeApi, bindEmailApi, sendCodeApi, bindPhoneApi } from '@/apis/user'
 import type { UploadFile,FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { updateUser } from '@/apis/user'
@@ -151,11 +172,20 @@ const formRef = useTemplateRef<FormInstance>('formRef')
 const userStore = useUserStore()
 const previewUrl = ref<string>('')
 
+const hasEmail = computed(() => !!userStore.getUser?.email)
+const hasPhone = computed(() => !!userStore.getUser?.phone)
+
 const bindEmailForm = ref({ email: '', code: '' })
 const emailCodeSending = ref(false)
 const emailBinding = ref(false)
 const emailCountdown = ref(0)
 let emailCountdownTimer: ReturnType<typeof setInterval> | null = null
+
+const bindPhoneForm = ref({ phone: '', code: '' })
+const phoneCodeSending = ref(false)
+const phoneBinding = ref(false)
+const phoneCountdown = ref(0)
+let phoneCountdownTimer: ReturnType<typeof setInterval> | null = null
 
 const form = ref<UserUpdate>({
     name: '',
@@ -192,7 +222,7 @@ const onAvatarSelect = async (file: UploadFile) => {
     const res = await uploadAvatarApi(formData)
     if (res.success && res.data) {
         form.value.avatar = res.data.databaseUrl  
-        previewUrl.value = res.data.previewUrl
+        previewUrl.value = '/files' + res.data.databaseUrl
         console.log(res.data.databaseUrl)
     }else{
         ElMessage.error(res.message)
@@ -258,6 +288,55 @@ const handleBindEmail = async () => {
         emailBinding.value = false
     }
 }
+const handleSendBindPhoneCode = async () => {
+    if (!bindPhoneForm.value.phone) {
+        ElMessage.warning('请输入手机号')
+        return
+    }
+    phoneCodeSending.value = true
+    try {
+        const res = await sendCodeApi(bindPhoneForm.value.phone)
+        if (res.success) {
+            ElMessage.success('验证码已发送')
+            phoneCountdown.value = 60
+            phoneCountdownTimer = setInterval(() => {
+                phoneCountdown.value--
+                if (phoneCountdown.value <= 0) {
+                    if (phoneCountdownTimer) clearInterval(phoneCountdownTimer)
+                    phoneCountdownTimer = null
+                }
+            }, 1000)
+        } else {
+            ElMessage.error(res.message || '发送失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '发送失败')
+    } finally {
+        phoneCodeSending.value = false
+    }
+}
+const handleBindPhone = async () => {
+    if (!bindPhoneForm.value.phone || !bindPhoneForm.value.code) {
+        ElMessage.warning('请填写手机号和验证码')
+        return
+    }
+    phoneBinding.value = true
+    try {
+        const res = await bindPhoneApi({ phone: bindPhoneForm.value.phone, code: bindPhoneForm.value.code })
+        if (res.success) {
+            ElMessage.success('手机号绑定成功')
+            bindPhoneForm.value = { phone: '', code: '' }
+            init()
+        } else {
+            ElMessage.error(res.message || '绑定失败')
+        }
+    } catch (err: any) {
+        ElMessage.error(err?.response?.data?.message || '绑定失败')
+    } finally {
+        phoneBinding.value = false
+    }
+}
+
 const logoutHandle = ()=>{
     ElMessageBox.confirm('确定退出登录吗？', '提示', {
         confirmButtonText: '确定',
