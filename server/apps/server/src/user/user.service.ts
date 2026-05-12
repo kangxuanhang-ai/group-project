@@ -126,6 +126,13 @@ export class UserService {
     return this.response.success(updated);
   }
 
+  async deleteAccount(user: Request['user']) {
+    const userId = user.userId;
+    await this.prisma.paymentRecord.deleteMany({ where: { userId } });
+    await this.prisma.user.delete({ where: { id: userId } });
+    return this.response.success(null);
+  }
+
   async checkIn(user: Request['user']) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);

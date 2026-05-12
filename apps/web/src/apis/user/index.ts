@@ -44,3 +44,7 @@ export const checkInApi = (): Promise<Response<{ dayNumber: number; checked: boo
 export const todayCheckInApi = (): Promise<Response<{ checked: boolean }>> => {
     return serverApi.get('/user/check-in/today') as Promise<Response<{ checked: boolean }>>
 }
+
+export const deleteAccountApi = (): Promise<Response<null>> => {
+    return serverApi.post('/user/delete-account') as Promise<Response<null>>
+}

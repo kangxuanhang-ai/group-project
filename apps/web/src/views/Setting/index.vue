@@ -137,13 +137,25 @@
                         <div class="font-bold">危险操作</div>
                     </template>
 
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between mb-4">
                         <div>
                             <div class="font-bold text-slate-900">退出登录</div>
                             <div class="text-sm text-slate-500">清除本地登录状态</div>
                         </div>
                         <el-button @click="logoutHandle" type="danger" plain>
                             退出
+                        </el-button>
+                    </div>
+
+                    <el-divider class="my-3" />
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="font-bold text-red-500">注销账号</div>
+                            <div class="text-sm text-slate-500">删除所有数据，此操作不可恢复</div>
+                        </div>
+                        <el-button @click="handleDeleteAccount" type="danger">
+                            注销账号
                         </el-button>
                     </div>
                 </el-card>
@@ -159,7 +171,7 @@ import type {FormItemRule,FormRules} from 'element-plus'
 import avatar from '@/assets/images//avatar/1.jpg'
 import { useUserStore } from '@/stores/user'
 import { uploadAvatarApi } from '@/apis/user'
-import { sendEmailCodeApi, bindEmailApi, sendCodeApi, bindPhoneApi } from '@/apis/user'
+import { sendEmailCodeApi, bindEmailApi, sendCodeApi, bindPhoneApi, deleteAccountApi } from '@/apis/user'
 import type { UploadFile,FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { updateUser } from '@/apis/user'
@@ -344,6 +356,36 @@ const logoutHandle = ()=>{
         type: 'warning',
     }).then(() => {
         useLogin().logout()
+    })
+}
+
+const handleDeleteAccount = () => {
+    ElMessageBox.confirm(
+        '注销账号后，您的所有数据（包括学习记录、课程购买、打卡记录等）将被永久删除，且无法恢复。',
+        '注销账号',
+        {
+            confirmButtonText: '确认注销',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    ).then(() => {
+        ElMessageBox.confirm(
+            '再次确认：此操作不可撤销，确定要注销账号吗？',
+            '二次确认',
+            {
+                confirmButtonText: '确定注销',
+                cancelButtonText: '取消',
+                type: 'error',
+            }
+        ).then(async () => {
+            const res = await deleteAccountApi()
+            if (res.success) {
+                ElMessage.success('账号已注销')
+                useLogin().logout()
+            } else {
+                ElMessage.error(res.message || '注销失败')
+            }
+        })
     })
 }
 

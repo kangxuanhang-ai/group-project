@@ -7,9 +7,9 @@
                 <div class="text-2xl font-bold pt-8 text-l text-indigo-500">通过跟AI对话，提高你的英语水平</div>
                 <div class="text-1xl font-bold pt-5 text-gray-300">超1000000学员的选择，提升您的英语能力</div>
                 <div class="flex items-center gap-2 pt-10">
-                    <button
+                    <button @click="handleStartLearning"
                         class="bg-indigo-700 text-white rounded-[100px] px-4 py-2 cursor-pointer text-sm block w-30 h-10">立即学习</button>
-                    <button
+                    <button @click="handleViewCourse"
                         class="bg-indigo-700 text-white rounded-[100px] px-4 py-2 cursor-pointer text-sm block w-30 h-10">查看课程</button>
                 </div>
             </div>
@@ -117,14 +117,30 @@
 import Hologram from './components/Hologram.vue'
 import {gsap} from 'gsap'
 import {ScrollTrigger} from 'gsap/ScrollTrigger'
-import {onMounted,reactive,ref} from 'vue'
+import {onMounted,reactive,ref,inject} from 'vue'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { checkInApi, todayCheckInApi } from '@/apis/user'
 import { ElMessage } from 'element-plus'
+import { IS_SHOW_LOGIN } from '@/components/Login/type'
 gsap.registerPlugin(ScrollTrigger)
+const router = useRouter()
+const isShowLogin = inject(IS_SHOW_LOGIN)
 const userStore = useUserStore()
 const checkedToday = ref(false)
 const checking = ref(false)
+
+const handleStartLearning = () => {
+  if (userStore.isLoggedIn) {
+    router.push('/word-book/index')
+  } else if (isShowLogin) {
+    isShowLogin.value = true
+  }
+}
+
+const handleViewCourse = () => {
+  router.push('/course/index')
+}
 
 const fetchTodayCheckIn = async () => {
     if (!userStore.isLoggedIn) return

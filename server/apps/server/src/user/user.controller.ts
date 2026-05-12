@@ -81,6 +81,14 @@ export class UserController {
     return this.userService.bindPhone(dto, user);
   }
 
+  //注销账号
+  @UseGuards(AuthGuard('jwt'))
+  @Post('delete-account')
+  deleteAccount(@Req() req: Request) {
+    const user = req.user;
+    return this.userService.deleteAccount(user);
+  }
+
   //打卡
   @UseGuards(AuthGuard('jwt'))
   @Post('check-in')
