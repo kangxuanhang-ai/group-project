@@ -117,7 +117,7 @@
 import Hologram from './components/Hologram.vue'
 import {gsap} from 'gsap'
 import {ScrollTrigger} from 'gsap/ScrollTrigger'
-import {onMounted,reactive,ref,inject} from 'vue'
+import {onMounted,reactive,ref,inject, type Ref} from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { checkInApi, todayCheckInApi } from '@/apis/user'
@@ -125,7 +125,7 @@ import { ElMessage } from 'element-plus'
 import { IS_SHOW_LOGIN } from '@/components/Login/type'
 gsap.registerPlugin(ScrollTrigger)
 const router = useRouter()
-const isShowLogin = inject(IS_SHOW_LOGIN)
+const isShowLogin = inject<Ref<boolean>>(IS_SHOW_LOGIN)
 const userStore = useUserStore()
 const checkedToday = ref(false)
 const checking = ref(false)
